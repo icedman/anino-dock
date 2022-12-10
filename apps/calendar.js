@@ -11,7 +11,7 @@ var Calendar = GObject.registerClass(
   {},
 
   // todo St.DrawingArea
-  class Calendar extends Clutter.Actor {
+  class AninoCalendar extends Clutter.Actor {
     _init(x) {
       super._init();
 

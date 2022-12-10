@@ -10,7 +10,7 @@ const Drawing = Me.imports.drawing.Drawing;
 
 var DebugOverlay = GObject.registerClass(
   {},
-  class DebugOverlay extends Clutter.Actor {
+  class AninoDebugOverlay extends Clutter.Actor {
     _init(x, y) {
       super._init();
 

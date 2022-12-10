@@ -12,7 +12,7 @@ let size = 400;
 var Clock = GObject.registerClass(
   {},
   // todo St.DrawingArea
-  class Clock extends Clutter.Actor {
+  class AninoClock extends Clutter.Actor {
     _init(x) {
       super._init();
 

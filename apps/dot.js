@@ -12,7 +12,7 @@ let size = 400;
 
 var Dot = GObject.registerClass(
   {},
-  class Dot extends Clutter.Actor {
+  class AninoDot extends Clutter.Actor {
     _init(x) {
       super._init();
 

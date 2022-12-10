@@ -20,7 +20,7 @@ let _preferredIconSizes = null;
 
 var Dock = GObject.registerClass(
   {},
-  class Dock extends St.BoxLayout {
+  class AninoDock extends St.BoxLayout {
     _init() {
       super._init({
         name: 'aninodotsContainer',

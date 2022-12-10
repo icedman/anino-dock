@@ -33,7 +33,7 @@ const get_shader_source = (_) => {
 /// https://gjs-docs.gnome.org/clutter10~10_api/clutter.shadereffect
 var TintEffect = new GObject.registerClass(
   {},
-  class ColorShader extends Clutter.ShaderEffect {
+  class AninoColorShader extends Clutter.ShaderEffect {
     _init(params) {
       this._red = null;
       this._green = null;

@@ -13,7 +13,7 @@ const DOT_CANVAS_SIZE = 96;
 
 var DockIcon = GObject.registerClass(
   {},
-  class DockIcon extends St.Widget {
+  class AninoDockIcon extends St.Widget {
     _init() {
       super._init({ name: 'DockIcon', reactive: false });
 
@@ -70,7 +70,7 @@ var DockIcon = GObject.registerClass(
 
 var IconsContainer = GObject.registerClass(
   {},
-  class IconsContainer extends St.Widget {
+  class AninoIconsContainer extends St.Widget {
     _init(params) {
       super._init({
         name: 'IconsContainer',
@@ -142,7 +142,7 @@ var IconsContainer = GObject.registerClass(
 
 var DotsContainer = GObject.registerClass(
   {},
-  class DotsContainer extends St.Widget {
+  class AninoDotsContainer extends St.Widget {
     _init(params) {
       super._init({
         name: 'IconsContainer',
@@ -296,7 +296,7 @@ var DotsContainer = GObject.registerClass(
 
 var DockExtension = GObject.registerClass(
   {},
-  class DockExtension extends St.Widget {
+  class AninoDockExtension extends St.Widget {
     _init(params) {
       super._init({
         reactive: true,
@@ -364,7 +364,7 @@ var DockExtension = GObject.registerClass(
 
 var DockBackground = GObject.registerClass(
   {},
-  class DockBackground extends St.Widget {
+  class AninoDockBackground extends St.Widget {
     _init(params) {
       super._init({
         name: 'DockBackground',
