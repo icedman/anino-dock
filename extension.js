@@ -585,7 +585,7 @@ class Extension {
       if (this.topbar_foreground_color && this.topbar_foreground_color[3] > 0) {
         let rgba = this._style.rgba(this.topbar_foreground_color);
         styles.push(
-          `#panelLeft *, #panelRight *, #panelCenter *, #panelBox #panel * { color: rgba(${rgba}) }`
+          `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
         );
       } else {
         let rgba = this._style.rgba([0, 0, 0, 1]);
@@ -594,7 +594,7 @@ class Extension {
           rgba = this._style.rgba([1, 1, 1, 1]);
         }
         styles.push(
-          `#panelLeft *, #panelRight *, #panelCenter *, #panelBox #panel * { color: rgba(${rgba}) }`
+          `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
         );
       }
     }

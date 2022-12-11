@@ -13,3 +13,7 @@
   border: 2px solid red;
 }
 
+#aninoDockOverlay #panelLeft > StBin {
+  /* border: 2px solid red; */
+  margin-right: 10px;
+}

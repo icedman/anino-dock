@@ -71,7 +71,7 @@ var Animator = class {
     this._dockExtension = new DockExtension({ name: 'aninoReactExtension' });
     this._dockExtension.listeners = this.dashContainer.listeners;
     this._dockExtension.visible = false;
-    this._dockOverlay = new DockOverlay({ name: 'aninoDockOverlay ' });
+    this._dockOverlay = new DockOverlay({ name: 'aninoDockOverlay' });
 
     this._overlay = new DebugOverlay(
       this.dashContainer._monitor.width,
