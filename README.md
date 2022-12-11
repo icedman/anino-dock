@@ -54,7 +54,7 @@ $ make
 Using the AUR (Arch User Repository):
 *This requires an Arch-based distribution to work:*
 ```bash
-$ git clone https://aur.archlinux.org/gnome-shell-extension-anino-dock.git
+$ git clone xxx (soon)
 $ makepkg -si
 ```
 
