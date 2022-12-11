@@ -81,7 +81,7 @@ var AutoHide = class {
   }
 
   _beginAnimation(t) {
-    if (this.extension.animator._dragging) {
+    if (this.animator._dragging) {
       return;
     }
 
@@ -211,7 +211,7 @@ var AutoHide = class {
     // log('.');
     if (!this.dashContainer) return false;
 
-    if (this.extension.animator && this.extension.animator._dragging) {
+    if (this.animator && this.animator._dragging) {
       return false;
     }
 
@@ -315,9 +315,13 @@ var AutoHide = class {
       return false;
     }
 
-    // log('---');
-    // log(pointer[1]);
-    // log(dash_position[1]);
+    if (this.animator._isWithinDash(pointer)) {
+      return false;
+    }
+
+    if (!this.extension.autohide_dodge) {
+      return true;
+    }
 
     if (this.extension._vertical) {
       if (this.extension._position == 'right') {

@@ -23,7 +23,7 @@ var Dock = GObject.registerClass(
   class AninoDock extends St.BoxLayout {
     _init() {
       super._init({
-        name: 'aninodotsContainer',
+        name: 'aninoDock',
         vertical: true,
         reactive: true,
         track_hover: true,
@@ -50,6 +50,12 @@ var Dock = GObject.registerClass(
       this.dash.opacity = 0;
       this.dash.visible = false;
       this.add_child(this.dash);
+
+      // this._rightBox = new St.Widget();
+      // this.add_child(this._rightBox);
+      // this._leftBox.style = 'border: 2px solid red;';
+      // this._rightBox.style = 'border: 2px solid red;';
+      // this.dash.style = 'border: 2px solid red;';
 
       this.listeners = [this.animator, this.autohider];
       this.connectObject(
@@ -443,6 +449,7 @@ var Dock = GObject.registerClass(
       if (this._icons) {
         let iconSpacing = iconSize * (1.2 + animation_spread / 4);
         let limit = this.extension._vertical ? 0.96 : 0.98;
+
         let scaleDown = 1.0;
         let maxWidth =
           (this.extension._vertical

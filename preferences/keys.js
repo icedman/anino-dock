@@ -56,6 +56,12 @@ SettingsKeys.setKeys({
     key_maps: {},
     test: { pointer: 'slide-through' },
   },
+  'autohide-dodge': {
+    default_value: true,
+    widget_type: 'switch',
+    key_maps: {},
+    test: { pointer: 'slide-through' },
+  },
   'pressure-sense': {
     default_value: true,
     widget_type: 'switch',

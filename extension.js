@@ -295,6 +295,7 @@ class Extension {
           this.animate();
           break;
         }
+        case 'autohide-dodge':
         case 'autohide-dash': {
           this._updateAutohide();
           break;

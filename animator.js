@@ -62,7 +62,7 @@ var Animator = class {
     });
 
     this._dotsContainer = new DotsContainer({
-      name: 'aninodotsContainer',
+      name: 'aninoDotsContainer',
       reactive: false,
     });
 
@@ -212,20 +212,23 @@ var Animator = class {
 
     // center the dash
     if (this.extension._vertical) {
-      if (this._projectedWidth > this.dashContainer.iconSize * 4) {
-        let pad = Math.floor(
-          (this.dashContainer.height - this._projectedWidth) / 2
-        );
+      if (
+        this.dashContainer._projectedWidth >
+        this.dashContainer.iconSize * 3
+      ) {
+        let size = [this.dashContainer.width, this.dashContainer.height];
+        let width = this.extension._vertical ? size[1] : size[0];
+        let pad = Math.floor((width - this.dashContainer._projectedWidth) / 2);
 
-        let new_height = this.dashContainer._leftBox.height * 8;
-        new_height += pad;
-        new_height /= 9;
-        if (new_height > 0) {
-          this.dashContainer._leftBox.height = new_height;
+        if (pad > 0) {
+          this.dashContainer._leftBox.width = this.extension._vertical
+            ? 0
+            : pad;
+          this.dashContainer._leftBox.height = this.extension._vertical
+            ? pad
+            : 0;
         }
       }
-    } else {
-      this.dashContainer._leftBox.height = 0;
     }
 
     let pivot = new Point();

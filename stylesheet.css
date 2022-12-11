@@ -4,15 +4,11 @@
      border: 2px solid magenta !important;
 }
 
-#aninodotsContainer {
-  /*border: 2px solid red;*/
-}
-
-#aninodotsContainer #dash * {
+#aninoDock #dash * {
   margin: 0px !important;
   padding: 0px !important;
 }
 
-#aninodotsContainer #dash .dash-item-container {
+#aninoDock #dash .dash-item-container {
   border: 2px solid red;
 }

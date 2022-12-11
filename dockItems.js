@@ -145,7 +145,7 @@ var DotsContainer = GObject.registerClass(
   class AninoDotsContainer extends St.Widget {
     _init(params) {
       super._init({
-        name: 'IconsContainer',
+        name: 'DotsContainer',
         ...(params || {}),
       });
       this._dots = [];
