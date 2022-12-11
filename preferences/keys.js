@@ -172,6 +172,10 @@ SettingsKeys.setKeys({
     default_value: false,
     widget_type: 'switch',
   },
+  'combine-top-bar': {
+    default_value: false,
+    widget_type: 'switch',
+  },
   'running-indicator-style': {
     default_value: 0,
     widget_type: 'dropdown',

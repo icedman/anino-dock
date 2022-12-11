@@ -3,6 +3,7 @@
 const { St, Shell, GObject, Gio, GLib, Meta, Clutter } = imports.gi;
 
 const Main = imports.ui.main;
+const Panel = imports.ui.panel.Panel;
 const Dash = imports.ui.dash.Dash;
 const Fav = imports.ui.appFavorites;
 const Point = imports.gi.Graphene.Point;
@@ -39,6 +40,15 @@ var Dock = GObject.registerClass(
       this.autohider = new AutoHide();
       this.autohider.dashContainer = this;
       this.autohider.animator = this.animator;
+
+      // panel
+      this.panel = Main.panel;
+      this.panel.visible = false;
+
+      // W: breakable
+      this.panelLeft = this.panel._leftBox;
+      this.panelRight = this.panel._rightBox;
+      this.panelCenter = this.panel._centerBox;
 
       this.createDash();
 
@@ -81,7 +91,24 @@ var Dock = GObject.registerClass(
     }
 
     undock() {
+      this.restorePanel();
       this.animator.disable();
+    }
+
+    restorePanel() {
+      // W: breakable
+      let reparent = [
+        this.panel._leftBox,
+        this.panel._centerBox,
+        this.panel._rightBox,
+      ];
+      reparent.forEach((c) => {
+        if (c.get_parent()) {
+          c.get_parent().remove_child(c);
+        }
+        this.panel.add_child(c);
+      });
+      this.panel.visible = true;
     }
 
     addToChrome() {
@@ -110,6 +137,11 @@ var Dock = GObject.registerClass(
         {
           c: this.animator._overlay,
           p: this.animator._iconsContainer,
+          above: true,
+        },
+        {
+          c: this.animator._dockOverlay,
+          p: this,
           above: true,
         },
       ];

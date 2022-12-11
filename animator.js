@@ -23,6 +23,7 @@ const {
   DotsContainer,
   DockExtension,
   DockBackground,
+  DockOverlay,
   explodeDashIcon,
 } = Me.imports.dockItems;
 
@@ -70,6 +71,7 @@ var Animator = class {
     this._dockExtension = new DockExtension({ name: 'aninoReactExtension' });
     this._dockExtension.listeners = this.dashContainer.listeners;
     this._dockExtension.visible = false;
+    this._dockOverlay = new DockOverlay({ name: 'aninoDockOverlay ' });
 
     this._overlay = new DebugOverlay(
       this.dashContainer._monitor.width,
@@ -613,6 +615,14 @@ var Animator = class {
       scale = scale.toFixed(3);
 
       let target_spread = Math.floor(iconSpacing * scaleFactor * scale);
+
+      // if (icon._icon.icon_name == 'spotify-client') {
+      //   target_spread += iconSize * scaleFactor;
+      //   icon._img.translation_x = -iconSize/2 * scaleFactor;
+      // } else {
+      //   icon._img.translation_x = 0;
+      // }
+
       if (this.extension._vertical) {
         icon._container.height = target_spread;
       } else {
@@ -626,6 +636,7 @@ var Animator = class {
 
       if (!isNaN(pos[0]) && !isNaN(pos[1])) {
         // mitigate issue #39
+        // proper padding now mitigates the issue
         // if (prevIcon && icon == lastIcon) {
         //   if (this.extension._vertical) {
         //     pos[1] =
@@ -661,9 +672,6 @@ var Animator = class {
             if (this.extension._vertical) {
               icon._label.y = pos[1];
             }
-            // icon._label.opacity = 255;
-          } else {
-            // icon._label.opacity = 0;
           }
         }
 
@@ -702,8 +710,19 @@ var Animator = class {
         scaleFactor,
         position: this.dashContainer._position,
         vertical: this.extension._vertical,
-        dashContainer: this.dashContainer,
         panel_mode: this.extension.panel_mode,
+        dashContainer: this.dashContainer,
+      });
+
+      this._dockOverlay.update({
+        background: this._background,
+        left: this.dashContainer.panelLeft,
+        right: this.dashContainer.panelRight,
+        center: this.dashContainer.panelCenter,
+        combine_top_bar: this.extension.combine_top_bar,
+        vertical: this.extension._vertical,
+        panel_mode: this.extension.panel_mode,
+        dashContainer: this.dashContainer,
       });
 
       if (this.extension._disable_borders && this._background.width > 0) {

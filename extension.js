@@ -330,6 +330,7 @@ class Extension {
         case 'topbar-background-color':
         case 'topbar-foreground-color':
         case 'background-color':
+        case 'combine-top-bar':
         case 'panel-mode': {
           this._updateStyle();
           this._updateLayout();
@@ -560,14 +561,18 @@ class Extension {
       // foreground
       if (this.topbar_foreground_color && this.topbar_foreground_color[3] > 0) {
         let rgba = this._style.rgba(this.topbar_foreground_color);
-        styles.push(`#panelBox #panel * { color: rgba(${rgba}) }`);
+        styles.push(
+          `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
+        );
       } else {
         let rgba = this._style.rgba([0, 0, 0, 1]);
         let bg = this.topbar_background_color;
         if (0.3 * bg[0] + 0.59 * bg[1] + 0.11 * bg[2] < 0.5) {
           rgba = this._style.rgba([1, 1, 1, 1]);
         }
-        styles.push(`#panelBox #panel * { color: rgba(${rgba}) }`);
+        styles.push(
+          `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
+        );
       }
     }
 

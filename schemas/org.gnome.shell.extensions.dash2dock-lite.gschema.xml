@@ -161,6 +161,11 @@
         <summary>Panel mode</summary>
         <description>Dock the dash on a full-width panel.</description>
     </key>
+    <key type="b" name="combine-top-bar">
+        <default>false</default>
+        <summary>Combine top bar mode</summary>
+        <description>Combine topbar to dock on panel mode.</description>
+    </key>
     <key type="b" name="favorites-only">
         <default>false</default>
         <summary>Favorits apps only</summary>

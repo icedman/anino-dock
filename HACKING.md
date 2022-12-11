@@ -3,6 +3,8 @@
 ```js
 media = Main.panel._centerBox.first_child.child._delegate._messageList._scrollView.last_child.get_children()[0]
 
+media.first_child.first_child.first_child.first_child.get_children()[0].get_children()[0].first_child.gicon
+
 v = media._players.entries(0)
 v.next().value
 ```
