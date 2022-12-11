@@ -210,25 +210,29 @@ var Animator = class {
     }
     this._prevPointer = pointer;
 
+    this.dashContainer.dash.style = '';
+
     // center the dash
     if (this.extension._vertical) {
       if (
         this.dashContainer._projectedWidth >
-        this.dashContainer.iconSize * 3
+        this.dashContainer.iconSize * 4
       ) {
-        let size = [this.dashContainer.width, this.dashContainer.height];
-        let width = this.extension._vertical ? size[1] : size[0];
+        let width = this.dashContainer.height;
         let pad = Math.floor((width - this.dashContainer._projectedWidth) / 2);
 
         if (pad > 0) {
-          this.dashContainer._leftBox.width = this.extension._vertical
-            ? 0
-            : pad;
-          this.dashContainer._leftBox.height = this.extension._vertical
-            ? pad
-            : 0;
+          this.dashContainer.dash.style = `padding-top: ${pad}px;`;
         }
       }
+    }
+
+    if (this.dashContainer._scaleDownExcess) {
+      let pad =
+        this.dashContainer._scaleDownExcess /
+        (this.extension._vertical ? 2 : 8);
+      let pos = this.extension._vertical ? 'bottom' : 'right';
+      this.dashContainer.dash.style += `padding-${pos}: ${pad}px;`;
     }
 
     let pivot = new Point();
@@ -622,15 +626,15 @@ var Animator = class {
 
       if (!isNaN(pos[0]) && !isNaN(pos[1])) {
         // mitigate issue #39
-        if (prevIcon && icon == lastIcon) {
-          if (this.extension._vertical) {
-            pos[1] =
-              (pos[1] + (prevIcon.y + prevIcon._container.height) * 3) / 4;
-          } else {
-            pos[0] =
-              (pos[0] + (prevIcon.x + prevIcon._container.width) * 3) / 4;
-          }
-        }
+        // if (prevIcon && icon == lastIcon) {
+        //   if (this.extension._vertical) {
+        //     pos[1] =
+        //       (pos[1] + (prevIcon.y + prevIcon._container.height) * 3) / 4;
+        //   } else {
+        //     pos[0] =
+        //       (pos[0] + (prevIcon.x + prevIcon._container.width) * 3) / 4;
+        //   }
+        // }
 
         icon.set_position(pos[0], pos[1]);
         icon._pos = [...pos];

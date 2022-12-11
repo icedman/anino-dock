@@ -23,7 +23,7 @@
         </child>
         <child>
           <object class="AdwActionRow" id="dock-location-row">
-            <property name="visible">false</property>
+            <property name="visible">true</property>
             <property name="title" translatable="yes">Dock Location</property>
             <property name="subtitle" translatable="yes">Set dock position on the screen.</property>
             <property name="activatable-widget">dock-location</property>
@@ -228,8 +228,8 @@
   <object class="GtkStringList" id="dock-location-model">
     <items>
       <item translatable="yes">Bottom</item>
-      <item translatable="yes">Left (experimental)</item>
-      <item translatable="yes">Right (experimental)</item>
+      <item translatable="yes">Left</item>
+      <item translatable="yes">Right</item>
     </items>
   </object>
   <object class="GtkStringList" id="open-app-animation-model">

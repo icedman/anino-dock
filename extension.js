@@ -245,6 +245,14 @@ class Extension {
           this.animate();
           break;
         }
+        case 'apps-icon-start': {
+          this.dashContainer.createDash();
+          this.animator._iconsContainer.clear();
+          this.animator.relayout();
+          this._updateLayout();
+          this.animate();
+          break;
+        }
         case 'apps-icon':
         case 'calendar-icon':
         case 'clock-icon': {
@@ -289,6 +297,7 @@ class Extension {
           }
           break;
         }
+        case 'dock-size-limit':
         case 'icon-size':
         case 'preferred-monitor': {
           this._updateLayout();

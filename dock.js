@@ -1,6 +1,6 @@
 'use strict';
 
-const { St, Shell, GObject, Gio, GLib, Gtk, Meta, Clutter } = imports.gi;
+const { St, Shell, GObject, Gio, GLib, Meta, Clutter } = imports.gi;
 
 const Main = imports.ui.main;
 const Dash = imports.ui.dash.Dash;
@@ -40,22 +40,7 @@ var Dock = GObject.registerClass(
       this.autohider.dashContainer = this;
       this.autohider.animator = this.animator;
 
-      this._leftBox = new St.Widget();
-      this.add_child(this._leftBox);
-
-      this.dash = new Dash();
-      this.dash.set_name('dash');
-      this.dash.add_style_class_name('overview');
-      this.dash._adjustIconSize = () => {};
-      this.dash.opacity = 0;
-      this.dash.visible = false;
-      this.add_child(this.dash);
-
-      // this._rightBox = new St.Widget();
-      // this.add_child(this._rightBox);
-      // this._leftBox.style = 'border: 2px solid red;';
-      // this._rightBox.style = 'border: 2px solid red;';
-      // this.dash.style = 'border: 2px solid red;';
+      this.createDash();
 
       this.listeners = [this.animator, this.autohider];
       this.connectObject(
@@ -71,6 +56,19 @@ var Dock = GObject.registerClass(
         () => {},
         this
       );
+    }
+
+    createDash() {
+      if (this.dash) {
+        this.remove_child(this.dash);
+      }
+      this.dash = new Dash();
+      this.dash.set_name('dash');
+      this.dash.add_style_class_name('overview');
+      this.dash._adjustIconSize = () => {};
+      this.dash.opacity = 0;
+      this.dash.visible = false;
+      this.add_child(this.dash);
     }
 
     vfunc_scroll_event(scrollEvent) {
@@ -389,6 +387,19 @@ var Dock = GObject.registerClass(
         }
       });
 
+      // reposition apps icon
+      // W: breakable
+      let p = this.dash._box.get_parent();
+      if (this.extension.apps_icon_start && p.first_child == this.dash._box) {
+        p.remove_child(this.dash._box);
+        p.add_child(this.dash._box);
+      } else if (
+        !this.extension.apps_icon_start &&
+        p.first_child != this.dash._box
+      ) {
+        // reverted to original position at end, when the dash is recreated via settings change event
+      }
+
       return icons;
     }
 
@@ -397,7 +408,6 @@ var Dock = GObject.registerClass(
 
       let {
         dock_location,
-        experimental_features,
         icon_size,
         edge_distance,
         panel_mode,
@@ -409,10 +419,6 @@ var Dock = GObject.registerClass(
       this.extension._queryDisplay();
 
       let pos = dock_location || 0;
-      // dock position -- [left, right] are experimental
-      if (!experimental_features) {
-        pos = 0;
-      }
 
       this.extension._position = ['bottom', 'left', 'right', 'top'][pos];
       this.extension._vertical =
@@ -446,9 +452,17 @@ var Dock = GObject.registerClass(
       }
 
       // scale down icons to fit monitor
+      this._scaleDownExcess = 0;
       if (this._icons) {
         let iconSpacing = iconSize * (1.2 + animation_spread / 4);
         let limit = this.extension._vertical ? 0.96 : 0.98;
+
+        if (
+          this.extension.dock_size_limit >= 0.5 &&
+          this.extension.dock_size_limit <= 1.0
+        ) {
+          limit *= this.extension.dock_size_limit;
+        }
 
         let scaleDown = 1.0;
         let maxWidth =
@@ -466,7 +480,10 @@ var Dock = GObject.registerClass(
         iconSize *= scaleDown;
         dockPadding *= scaleDown;
         distance *= scaleDown;
-        this._projectedWidth = projectedWidth * scaleDown;
+        let scaleDownWidth = projectedWidth * scaleDown;
+        let diff = projectedWidth - scaleDownWidth;
+        this._scaleDownExcess = diff;
+        this._projectedWidth = scaleDownWidth;
       }
       this.extension._effective_edge_distance = distance;
 

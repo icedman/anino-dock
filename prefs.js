@@ -146,7 +146,6 @@ function fillPreferencesWindow(window) {
 
   function toggle_experimental() {
     let exp = SettingsKeys.getValue('experimental-features');
-    builder.get_object('dock-location-row').visible = exp;
     builder.get_object('self-test-row').visible = exp;
   }
 

@@ -32,6 +32,10 @@ SettingsKeys.setKeys({
     default_value: 0,
     widget_type: 'scale',
   },
+  'dock-size-limit': {
+    default_value: 1.0,
+    widget_type: 'scale',
+  },
   'animate-icons-unmute': {
     default_value: true,
     widget_type: 'switch',
@@ -100,6 +104,10 @@ SettingsKeys.setKeys({
   },
   'apps-icon': {
     default_value: true,
+    widget_type: 'switch',
+  },
+  'apps-icon-start': {
+    default_value: false,
     widget_type: 'switch',
   },
   'trash-icon': {
