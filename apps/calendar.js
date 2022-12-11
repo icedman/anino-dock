@@ -63,7 +63,7 @@ var Calendar = GObject.registerClass(
         -size / 2 + offset / 2,
         bgSize,
         bgSize,
-        1,
+        0,
         8
       );
       Drawing.set_color(ctx, accent_color, 1.0);

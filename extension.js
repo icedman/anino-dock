@@ -109,10 +109,12 @@ class Extension {
     log('anino-dock enabled');
 
     // hide artifact at startup
-    Main.panel.statusArea['activities'].container.opacity = 0;
-    this._loTimer.runOnce(() => {
-      Main.panel.statusArea['activities'].container.opacity = 255;
-    }, 2500);
+    if (this.panel_model) {
+      Main.panel.statusArea['activities'].container.opacity = 0;
+      this._loTimer.runOnce(() => {
+        Main.panel.statusArea['activities'].container.opacity = 255;
+      }, 2500);
+    }
   }
 
   disable() {

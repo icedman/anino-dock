@@ -27,7 +27,7 @@ const {
   explodeDashIcon,
 } = Me.imports.dockItems;
 
-const DebugOverlay = Me.imports.apps.overlay.DebugOverlay;
+const DrawOverlay = Me.imports.apps.overlay.DrawOverlay;
 
 const ANIM_POS_COEF = 1.5;
 const ANIM_SCALE_COEF = 2.5;
@@ -73,7 +73,7 @@ var Animator = class {
     this._dockExtension.visible = false;
     this._dockOverlay = new DockOverlay({ name: 'aninoDockOverlay' });
 
-    this._overlay = new DebugOverlay(
+    this._overlay = new DrawOverlay(
       this.dashContainer._monitor.width,
       this.dashContainer._monitor.height
     );
@@ -501,36 +501,8 @@ var Animator = class {
       // debug draw
       // todo move to overlay class
       if (this.extension.debug_visual) {
-        this._overlay.onDraw = (ctx) => {
-          anim.debugDraw.forEach((d) => {
-            // log(`${d.t} ${d.x} ${d.y}`);
-            switch (d.t) {
-              case 'line':
-                Drawing.draw_line(
-                  ctx,
-                  d.c,
-                  1,
-                  d.x - monitor.x,
-                  d.y - monitor.y,
-                  d.x2,
-                  d.y2,
-                  true
-                );
-                break;
-              case 'circle':
-                Drawing.draw_circle(
-                  ctx,
-                  d.c,
-                  d.x - monitor.x,
-                  d.y - monitor.y,
-                  d.d,
-                  true
-                );
-                break;
-            }
-          });
-        };
-
+        this._overlay.state.monitor = monitor;
+        this._overlay.objects = anim.debugDraw;
         this._overlay.visible = this.extension.debug_visual;
         this._overlay.set_position(monitor.x, monitor.y);
         this._overlay.set_size(monitor.width, monitor.height);

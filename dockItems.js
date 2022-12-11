@@ -7,6 +7,9 @@ const Point = imports.gi.Graphene.Point;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const DrawOverlay = Me.imports.apps.overlay.DrawOverlay;
+const Drawing = Me.imports.drawing.Drawing;
+
 const Dot = Me.imports.apps.dot.Dot;
 
 const DOT_CANVAS_SIZE = 96;
@@ -362,6 +365,19 @@ var DockExtension = GObject.registerClass(
   }
 );
 
+function drawBackground(ctx) {
+  let w = 2;
+  Drawing.draw_rect(
+    ctx,
+    [1, 0, 0, 1],
+    w,
+    w,
+    this.width - w * 3,
+    this.height - w * 3,
+    w
+  );
+}
+
 var DockBackground = GObject.registerClass(
   {},
   class AninoDockBackground extends St.Widget {
@@ -370,6 +386,10 @@ var DockBackground = GObject.registerClass(
         name: 'DockBackground',
         ...(params || {}),
       });
+
+      this.drawOverlay = new DrawOverlay(20, 20);
+      this.drawOverlay.onDraw = drawBackground.bind(this.drawOverlay);
+      this.add_child(this.drawOverlay);
     }
 
     update(params) {
@@ -442,6 +462,8 @@ var DockBackground = GObject.registerClass(
             this.width = dashContainer.width;
           }
         }
+
+        // this.drawOverlay.resize(this.width, this.height);
       }
     }
   }
