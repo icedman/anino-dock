@@ -270,6 +270,7 @@ var AutoHide = class {
     } else {
       this.dashContainer.set_position(this.target[0], y);
     }
+
     return this._animating;
   }
 

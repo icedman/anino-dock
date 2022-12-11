@@ -107,6 +107,12 @@ class Extension {
     this.startUp();
 
     log('anino-dock enabled');
+
+    // hide artifact at startup
+    Main.panel.statusArea['activities'].container.opacity = 0;
+    this._loTimer.runOnce(() => {
+      Main.panel.statusArea['activities'].container.opacity = 255;
+    }, 2500);
   }
 
   disable() {
@@ -151,18 +157,27 @@ class Extension {
 
   startUp() {
     // this._debouncedUpdateStyle();
-    this.dashContainer.animator._iconsContainer.opacity = 0;
+    this.dashContainer.animator._invisible(true, true);
 
     // todo... refactor this
     if (!this._startupSeq) {
       let func = () => {
         this._updateLayout();
         this.animate();
+        if (!this._vertical) {
+          this.dashContainer.animator._invisible(false, false);
+        }
       };
       this._startupSeq = this._hiTimer.runSequence([
         { func, delay: 50 },
         { func, delay: 250 },
         { func, delay: 500 },
+        {
+          func: () => {
+            this.dashContainer.animator._invisible(false, false);
+          },
+          delay: 50,
+        },
       ]);
     } else {
       this._hiTimer.runSequence(this._startupSeq);
@@ -300,6 +315,14 @@ class Extension {
         case 'dock-size-limit':
         case 'icon-size':
         case 'preferred-monitor': {
+          this._updateLayout();
+          this.animate();
+          break;
+        }
+        case 'drawing-accent-color':
+        case 'drawing-dark-color':
+        case 'drawing-light-color': {
+          this.services.redraw();
           this._updateLayout();
           this.animate();
           break;
@@ -562,7 +585,7 @@ class Extension {
       if (this.topbar_foreground_color && this.topbar_foreground_color[3] > 0) {
         let rgba = this._style.rgba(this.topbar_foreground_color);
         styles.push(
-          `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
+          `#panelLeft *, #panelRight *, #panelCenter *, #panelBox #panel * { color: rgba(${rgba}) }`
         );
       } else {
         let rgba = this._style.rgba([0, 0, 0, 1]);
@@ -571,7 +594,7 @@ class Extension {
           rgba = this._style.rgba([1, 1, 1, 1]);
         }
         styles.push(
-          `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
+          `#panelLeft *, #panelRight *, #panelCenter *, #panelBox #panel * { color: rgba(${rgba}) }`
         );
       }
     }

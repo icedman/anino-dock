@@ -419,6 +419,20 @@ var Services = class {
     }
   }
 
+  redraw() {
+    let widgets = [this.clock, this.calendar];
+    widgets.forEach((w) => {
+      if (w) {
+        w.settings = {
+          dark_color: this.extension.drawing_dark_color,
+          light_color: this.extension.drawing_light_color,
+          accent_color: this.extension.drawing_accent_color,
+        };
+        w.redraw();
+      }
+    });
+  }
+
   updateIcon(icon, settings) {
     if (!icon || !icon.icon_name) {
       return;
@@ -437,6 +451,7 @@ var Services = class {
     }
 
     // clock
+    let didCreate = false;
     if (icon.icon_name == 'org.gnome.clocks') {
       let p = icon.get_parent();
       if (this.extension.clock_icon) {
@@ -446,6 +461,7 @@ var Services = class {
           clock.reactive = false;
           this.clock = clock;
           p.clock = this.clock;
+          didCreate = true;
         }
         if (p.clock) {
           let scale =
@@ -478,6 +494,7 @@ var Services = class {
           calendar.reactive = false;
           this.calendar = calendar;
           p.calendar = this.calendar;
+          didCreate = true;
         }
         if (p.calendar) {
           let scale =
@@ -497,6 +514,10 @@ var Services = class {
           p.calendar.hide();
         }
       }
+    }
+
+    if (didCreate) {
+      this.redraw();
     }
   }
 };

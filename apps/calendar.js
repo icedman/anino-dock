@@ -17,6 +17,12 @@ var Calendar = GObject.registerClass(
 
       if (x) size = x;
 
+      this.settings = {
+        dark_color: [0.2, 0.2, 0.2, 1.0],
+        light_color: [1.0, 1.0, 1.0, 1.0],
+        accent_color: [1.0, 0.0, 0.0, 1.0],
+      };
+
       this._canvas = new Clutter.Canvas();
       this._canvas.connect('draw', this.on_draw.bind(this));
       this._canvas.invalidate();
@@ -31,10 +37,11 @@ var Calendar = GObject.registerClass(
     }
 
     on_draw(canvas, ctx, width, height) {
-      const hd_color = 'red';
-      const bg_color = 'white';
-      const day_color = 'black';
-      const date_color = 'red';
+      const { dark_color, light_color, accent_color } = this.settings;
+
+      const bg_color = light_color;
+      const day_color = dark_color;
+      const date_color = accent_color;
 
       ctx.setOperator(Cairo.Operator.CLEAR);
       ctx.paint();
@@ -59,7 +66,7 @@ var Calendar = GObject.registerClass(
         1,
         8
       );
-      Drawing.set_color(ctx, date_color, 1.0);
+      Drawing.set_color(ctx, accent_color, 1.0);
       ctx.moveTo(0, 12);
       Drawing.draw_text(ctx, `${d0.getDate()}`, 'DejaVuSans 36');
 

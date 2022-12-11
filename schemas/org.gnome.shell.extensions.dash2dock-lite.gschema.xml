@@ -256,5 +256,20 @@
         <summary>MsgBus</summary>
         <description>Preferences-Extension message bus</description>
     </key>
+    <key type="(dddd)" name="drawing-accent-color">
+        <default>(1.,0.,0.,1.)</default>
+        <summary>Accent color</summary>
+        <description>Set accent color.</description>
+    </key>
+    <key type="(dddd)" name="drawing-dark-color">
+        <default>(0.2, 0.2, 0.2, 1.)</default>
+        <summary>Dark color</summary>
+        <description>Set dark color.</description>
+    </key>
+    <key type="(dddd)" name="drawing-light-color">
+        <default>(1.,1.,1.,1.)</default>
+        <summary>Light color</summary>
+        <description>Set light color.</description>
+    </key>
   </schema>
 </schemalist>

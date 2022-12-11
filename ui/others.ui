@@ -100,5 +100,62 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Widget Colors</property>
+        <property name="description" translatable="yes">Set colors used in custom drawn widgets.</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Accent Color</property>
+            <property name="subtitle" translatable="yes">Select accent color.</property>
+            <property name="activatable-widget">drawing-accent-color</property>
+            <child>
+              <object class="GtkColorButton" id="drawing-accent-color">
+                <property name="valign">center</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">70px</property>
+                <property name="height-request">45px</property>
+                <property name="show-editor">true</property>
+                <property name="use-alpha">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Light Color</property>
+            <property name="subtitle" translatable="yes">Select light color.</property>
+            <property name="activatable-widget">drawing-light-color</property>
+            <child>
+              <object class="GtkColorButton" id="drawing-light-color">
+                <property name="valign">center</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">70px</property>
+                <property name="height-request">45px</property>
+                <property name="show-editor">true</property>
+                <property name="use-alpha">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Dark Color</property>
+            <property name="subtitle" translatable="yes">Select dark color.</property>
+            <property name="activatable-widget">drawing-dark-color</property>
+            <child>
+              <object class="GtkColorButton" id="drawing-dark-color">
+                <property name="valign">center</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">70px</property>
+                <property name="height-request">45px</property>
+                <property name="show-editor">true</property>
+                <property name="use-alpha">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </object>
 </interface>

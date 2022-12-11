@@ -248,4 +248,16 @@ SettingsKeys.setKeys({
     default_value: 0.4,
     widget_type: 'scale',
   },
+  'drawing-accent-color': {
+    default_value: [1.0, 0, 0, 1.0],
+    widget_type: 'color',
+  },
+  'drawing-dark-color': {
+    default_value: [0.2, 0.2, 0.2, 1.0],
+    widget_type: 'color',
+  },
+  'drawing-light-color': {
+    default_value: [1.0, 1.0, 1.0, 1.0],
+    widget_type: 'color',
+  },
 });
