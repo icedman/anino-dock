@@ -24,11 +24,7 @@ var Animation = (animateIcons, pointer, settings) => {
     settings.scaleFactor *
     (settings.animation_spread / 2);
 
-  // compute diameter
-  animateIcons.forEach((i) => {
-    i._d = nsz;
-
-    // distance
+  function compute_d(i) {
     let dx = i._pos[0] - center[0];
     if (settings.vertical) {
       dx = i._pos[1] - center[1];
@@ -38,6 +34,14 @@ var Animation = (animateIcons, pointer, settings) => {
       let dd = 1.0 - Math.abs(dx) / szr;
       i._d = nsz + nsz * settings.animation_magnify * settings.scaleFactor * dd;
     }
+  }
+
+  // compute diameter
+  animateIcons.forEach((i) => {
+    i._d = nsz;
+
+    // distance
+    compute_d(i);
 
     i._pos2 = [...i._pos];
     i._targetScale = i._d / nsz;
@@ -60,7 +64,6 @@ var Animation = (animateIcons, pointer, settings) => {
 
   animateIcons.forEach((i) => {
     i._pos = i._pos2;
-    i._previousPos = [...i._pos];
   });
 
   let debugDraw = [];
@@ -90,6 +93,8 @@ var Animation = (animateIcons, pointer, settings) => {
   //   y2: last[1],
   //   c: [1, 0, 1, 1],
   // });
+
+  let max = nsz + nsz * settings.animation_magnify * settings.scaleFactor;
 
   return {
     first,

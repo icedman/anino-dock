@@ -178,7 +178,7 @@ var Animator = class {
 
     // get monitor scaleFactor
     let scaleFactor = this._getScaleFactor();
-    let iconSize = this.dashContainer.iconSize;
+    let iconSize = Math.floor(this.dashContainer.iconSize);
     let iconSpacing = iconSize * (1.2 + this.extension.animation_spread / 4);
     let effective_edge_distance = this.extension._effective_edge_distance;
 
@@ -213,7 +213,6 @@ var Animator = class {
     this._prevPointer = pointer;
 
     this.dashContainer.dash.style = '';
-
     // center the dash
     if (this.extension._vertical) {
       if (
@@ -240,8 +239,6 @@ var Animator = class {
     let pivot = new Point();
     pivot.x = 0.5;
     pivot.y = 1.0;
-
-    let existingIcons = this._iconsContainer.get_children();
 
     let validPosition = true;
     let dock_position = this.dashContainer._position;
@@ -418,7 +415,14 @@ var Animator = class {
       this._preview = null;
     }
 
-    if (!this._preview && !this._isWithinDash(pointer)) {
+    let isWithin = this._isWithinDash(pointer);
+    // if (isWithin) {
+    //   this._isWithinCount = (this._isWithinCount || 0) + 1;
+    // } else {
+    //   this._isWithinCount = 0;
+    // }
+
+    if (!this._preview && !isWithin) {
       nearestIcon = null;
     }
 
@@ -453,8 +457,6 @@ var Animator = class {
     let didAnimate = false;
 
     let off = (iconSize * scaleFactor) / 2;
-    // let offX = (iconSpacing / 2 - iconSize / 2) * scaleFactor;
-
     animateIcons.forEach((i) => {
       if (!i._pos) return;
       let p = [...i._pos];
@@ -486,6 +488,7 @@ var Animator = class {
       let animation_type = this.extension.animation_type;
       let anim = Animation(animateIcons, [px, py], {
         iconSize,
+        iconSpacing,
         scaleFactor: 1.0,
         animation_rise: this.extension.animation_rise * ANIM_ICON_RAISE,
         animation_magnify: this.extension.animation_magnify * ANIM_ICON_SCALE,
@@ -524,12 +527,11 @@ var Animator = class {
     let dotIndex = 0;
     let has_errors = false;
 
+    let scaledIcons = [];
+
     // todo
     // all icons scale up (scaleJump 0.08) when cursor within hover area
     let scaleJump = 0; // this._inDash ? 0.08 : 0;
-
-    let lastIcon = animateIcons[animateIcons.length - 1];
-    let prevIcon = null;
 
     // animate to target scale and position
     // todo .. make this velocity based
@@ -580,25 +582,34 @@ var Animator = class {
         has_errors = true;
       }
 
-      // minimize icon shaking
       if (scale < 1.0) {
         scale = 1.0;
       }
-      scale = scale.toFixed(3);
+      // scale = scale.toFixed(3);
 
-      let target_spread = Math.floor(iconSpacing * scaleFactor * scale);
+      let targetSpread = Math.floor(iconSpacing * scaleFactor * scale);
+
+      // if (icon._targetScale > 1.0) {
+      //   scaledIcons.push(icon);
+      // }
+      // if (didAnimate && icon._targetScale == 1.0 && scaledIcons.length <= 1) {
+      //   scaledIcons = [icon];
+      // }
+      // if (isWithin) {
+      //   targetSpread = Math.floor(iconSpacing * scaleFactor * 1.1);
+      // }
 
       // if (icon._icon.icon_name == 'spotify-client') {
-      //   target_spread += iconSize * scaleFactor;
+      //   targetSpread += iconSize * scaleFactor;
       //   icon._img.translation_x = -iconSize/2 * scaleFactor;
       // } else {
       //   icon._img.translation_x = 0;
       // }
 
       if (this.extension._vertical) {
-        icon._container.height = target_spread;
+        icon._container.height = targetSpread;
       } else {
-        icon._container.width = target_spread;
+        icon._container.width = targetSpread;
       }
 
       // scale
@@ -607,17 +618,21 @@ var Animator = class {
       }
 
       if (!isNaN(pos[0]) && !isNaN(pos[1])) {
-        // mitigate issue #39
-        // proper padding now mitigates the issue
-        // if (prevIcon && icon == lastIcon) {
-        //   if (this.extension._vertical) {
-        //     pos[1] =
-        //       (pos[1] + (prevIcon.y + prevIcon._container.height) * 3) / 4;
-        //   } else {
-        //     pos[0] =
-        //       (pos[0] + (prevIcon.x + prevIcon._container.width) * 3) / 4;
-        //   }
-        // }
+        if (didAnimate) {
+          if (!icon._anchor) {
+            icon._anchor = pos;
+          } else {
+            let coef = 1 + this._isWithinCount / 8;
+            icon._anchor[ix] *= coef;
+            icon._anchor[ix] += pos[ix];
+            icon._anchor[ix] /= coef + 1;
+            icon._anchor[iy] = pos[iy];
+          }
+          let diff = Math.sqrt(icon._anchor[ix] - pos[ix]);
+          if (diff < 8) {
+            pos = [...icon._anchor];
+          }
+        }
 
         icon.set_position(pos[0], pos[1]);
         icon._pos = [...pos];
@@ -646,10 +661,17 @@ var Animator = class {
             }
           }
         }
-
-        prevIcon = icon;
       }
     });
+
+    // if (scaledIcons.length) {
+    //   let totalScale = 0;
+    //   let totalWidth = 0;
+    //   scaledIcons.forEach((i) => {
+    //     totalScale += i.scale_x;
+    //     totalWidth += i._container.width;
+    //   });
+    // }
 
     this._dotsContainer.update({
       icons: animateIcons,
@@ -773,7 +795,7 @@ var Animator = class {
       if (!this.debounceReadySeq) {
         this.debounceReadySeq = this.extension._loTimer.runDebounced(() => {
           this._invisible(false);
-          this._startAnimation();
+          this._beginAnimation();
         }, 100);
       } else {
         this.extension._loTimer.runDebounced(this.debounceReadySeq);
@@ -945,7 +967,7 @@ var Animator = class {
   }
 
   _onEnterEvent() {
-    this._startAnimation();
+    this._beginAnimation();
   }
 
   _onLeaveEvent() {
@@ -964,7 +986,7 @@ var Animator = class {
         // log(`>>${this._dotsCount} ${this._iconsCount}`);
 
         this._endAnimation();
-        this._startAnimation();
+        this._beginAnimation();
         this.relayout();
         // animate the added icon
       }
@@ -989,12 +1011,6 @@ var Animator = class {
   _isInFullscreen() {
     let monitor = this.dashContainer._monitor;
     return monitor.inFullscreen;
-  }
-
-  // todo: drop and just use beginAnimation which debouncesEndAnimation?
-  _startAnimation() {
-    this._beginAnimation();
-    // this._debounceEndAnimation();
   }
 
   _lockCycle() {

@@ -599,6 +599,10 @@ class Extension {
           `#aninoDockOverlay *, #panelBox #panel * { color: rgba(${rgba}) }`
         );
       }
+
+      // styles.push(
+      //   `#aninoDockOverlay #panelCenter * { color: yellow; }`
+      // );
     }
 
     this._style.build('custom', styles);
