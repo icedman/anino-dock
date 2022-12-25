@@ -16,6 +16,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const TintEffect = Me.imports.effects.tint_effect.TintEffect;
 const MonochromeEffect = Me.imports.effects.monochrome_effect.MonochromeEffect;
 const Animation = Me.imports.effects.more_maclike_animation.Animation;
+const AnimationVertical = Me.imports.effects.maclike_animation.Animation;
 const Drawing = Me.imports.drawing.Drawing;
 
 const {
@@ -477,7 +478,11 @@ var Animator = class {
     if (animateIcons.length && nearestIcon) {
       let animation_type = this.extension.animation_type;
 
-      let anim = Animation(animateIcons, pointer, {
+      let vertical = this.extension._vertical
+        ? this.dashContainer._position
+        : 0;
+      let F = vertical ? AnimationVertical : Animation;
+      let anim = F(animateIcons, pointer, {
         iconsCount: animateIcons.length,
         iconSize,
         iconSpacing,
@@ -490,7 +495,7 @@ var Animator = class {
         animation_rise: this.extension.animation_rise * ANIM_ICON_RAISE,
         animation_magnify: this.extension.animation_magnify * ANIM_ICON_SCALE,
         animation_spread: this.extension.animation_spread,
-        vertical: this.extension._vertical ? this.dashContainer._position : 0,
+        vertical,
       });
 
       this.dashContainer.dash.style += `padding-left: ${anim.padLeft}px; padding-right: ${anim.padRight}px;`;
