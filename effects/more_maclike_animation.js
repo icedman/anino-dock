@@ -2,8 +2,8 @@ function gen_frames(settings) {
   let { iconsCount, iconSize, iconSpacing, pointer, width, height, debugDraw } =
     settings;
 
-  let iconSpacingX = iconSpacing + (iconSpacing * 0.2 * settings.animation_spread);
-  let iconSpacingY = iconSpacing;
+  let iconSpacingX = Math.floor(iconSpacing + (iconSpacing * 0.2 * settings.animation_spread));
+  let iconSpacingY = Math.floor(iconSpacing);
 
   let frames = [];
   for (let i = 0; i < iconsCount; i++) {
@@ -112,7 +112,7 @@ function gen_frames(settings) {
       let usedArea = 0;
       center.forEach((f) => {
         f.x = leftX;
-        f.w = area * (f.p / totalP);
+        f.w = Math.floor(area * (f.p / totalP));
         leftX += f.w;
         usedArea += f.w;
       });
@@ -182,8 +182,6 @@ var Animation = (animateIcons, pointer, settings) => {
     a._targetScale = f.p;
     a._targetSpread = f.w;
   });
-
-  log(`${padLeft} ${padRight}`);
 
   return {
     first,
