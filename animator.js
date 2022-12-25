@@ -15,7 +15,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 
 const TintEffect = Me.imports.effects.tint_effect.TintEffect;
 const MonochromeEffect = Me.imports.effects.monochrome_effect.MonochromeEffect;
-const Animation = Me.imports.effects.maclike_animation.Animation;
+const Animation = Me.imports.effects.more_maclike_animation.Animation;
 const Drawing = Me.imports.drawing.Drawing;
 
 const {
@@ -202,16 +202,6 @@ var Animator = class {
     let pointer = global.get_pointer();
     let monitor = this.dashContainer._monitor;
 
-    let minimizeShaking = false;
-    if (
-      this._prevPointer &&
-      this._prevPointer[0] == pointer[0] &&
-      this._prevPointer[1] == pointer[1]
-    ) {
-      minimizeShaking = true;
-    }
-    this._prevPointer = pointer;
-
     this.dashContainer.dash.style = '';
     // center the dash
     if (this.extension._vertical) {
@@ -392,6 +382,7 @@ var Animator = class {
 
       icon._target = pos;
       icon._targetScale = 1;
+      icon._targetSpread = iconSpacing;
 
       if (this.extension._vertical) {
         //
@@ -486,15 +477,24 @@ var Animator = class {
     // animation behavior
     if (animateIcons.length && nearestIcon) {
       let animation_type = this.extension.animation_type;
-      let anim = Animation(animateIcons, [px, py], {
+
+      let anim = Animation(animateIcons, pointer, {
+        iconsCount: animateIcons.length,
         iconSize,
         iconSpacing,
+        pointer,
+        x: this.dashContainer.x,
+        y: this.dashContainer.y,
+        width: this.dashContainer.width,
+        height: this.dashContainer.height,
         scaleFactor: 1.0,
         animation_rise: this.extension.animation_rise * ANIM_ICON_RAISE,
         animation_magnify: this.extension.animation_magnify * ANIM_ICON_SCALE,
         animation_spread: this.extension.animation_spread,
         vertical: this.extension._vertical ? this.dashContainer._position : 0,
       });
+
+      this.dash.style = `padding-left: ${anim.padLeft}; padding-right: ${anim.padRight};`;
 
       // commit
       animateIcons.forEach((i) => {
@@ -511,6 +511,8 @@ var Animator = class {
         this._overlay.set_size(monitor.width, monitor.height);
         this._overlay.redraw();
       }
+    } else {
+      this.dash.style = '';
     }
 
     if (!nearestIcon) {
@@ -527,7 +529,7 @@ var Animator = class {
     let dotIndex = 0;
     let has_errors = false;
 
-    let scaledIcons = [];
+    // let scaledIcons = [];
 
     // todo
     // all icons scale up (scaleJump 0.08) when cursor within hover area
@@ -584,13 +586,6 @@ var Animator = class {
 
       if (scale < 1.0) {
         scale = 1.0;
-      }
-
-      let targetSpread = Math.floor(iconSpacing * scaleFactor * scale);
-
-      icon._targetSpread = targetSpread;
-      if (icon._targetScale > 1.0) {
-        scaledIcons.push(icon);
       }
 
       // if (icon._icon.icon_name == 'spotify-client') {

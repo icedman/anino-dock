@@ -63,6 +63,7 @@ var Animation = (animateIcons, pointer, settings) => {
 
   animateIcons.forEach((i) => {
     i._pos = i._pos2;
+    i._targetSpread = Math.floor(settings.iconSpacing * settings.scaleFactor * i._targetScale);
   });
 
   let debugDraw = [];
@@ -98,6 +99,8 @@ var Animation = (animateIcons, pointer, settings) => {
   return {
     first,
     last,
+    padLeft: 0,
+    padRight: 0,
     debugDraw,
   };
 };
