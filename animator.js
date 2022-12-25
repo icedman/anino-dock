@@ -211,7 +211,6 @@ var Animator = class {
       ) {
         let width = this.dashContainer.height;
         let pad = Math.floor((width - this.dashContainer._projectedWidth) / 2);
-
         if (pad > 0) {
           this.dashContainer.dash.style = `padding-top: ${pad}px;`;
         }
@@ -494,7 +493,7 @@ var Animator = class {
         vertical: this.extension._vertical ? this.dashContainer._position : 0,
       });
 
-      this.dash.style = `padding-left: ${anim.padLeft}; padding-right: ${anim.padRight};`;
+      this.dashContainer.dash.style += `padding-left: ${anim.padLeft}px; padding-right: ${anim.padRight}px;`;
 
       // commit
       animateIcons.forEach((i) => {

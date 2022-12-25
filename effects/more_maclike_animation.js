@@ -1,8 +1,18 @@
+function total_width(frames) {
+  let tw = 0;
+  frames.forEach((f) => {
+    tw += f.w;
+  });
+  return tw;
+}
+
 function gen_frames(settings) {
   let { iconsCount, iconSize, iconSpacing, pointer, width, height, debugDraw } =
     settings;
 
-  let iconSpacingX = Math.floor(iconSpacing + (iconSpacing * 0.2 * settings.animation_spread));
+  let iconSpacingX = Math.floor(
+    iconSpacing + iconSpacing * 0.2 * settings.animation_spread
+  );
   let iconSpacingY = Math.floor(iconSpacing);
 
   let frames = [];
@@ -17,16 +27,8 @@ function gen_frames(settings) {
     });
   }
 
-  function totalWidth() {
-    let tw = 0;
-    frames.forEach((f) => {
-      tw += f.w;
-    });
-    return tw;
-  }
-
   function reposition() {
-    let tw = totalWidth();
+    let tw = total_width(frames);
     let x1 = width / 2 - tw / 2;
     let y1 = height - iconSpacing - 8;
     frames.forEach((f) => {
@@ -116,6 +118,10 @@ function gen_frames(settings) {
         leftX += f.w;
         usedArea += f.w;
       });
+
+      let diff = area - usedArea;
+      center[0].w += diff;
+      // log(`${usedArea} ${area}`);
     }
 
     debugDraw.push({
@@ -130,6 +136,7 @@ function gen_frames(settings) {
 }
 
 var Animation = (animateIcons, pointer, settings) => {
+  if (!animateIcons.length) return;
   let _firstIcon = animateIcons[0];
   let _lastIcon = animateIcons[animateIcons.length - 1];
   let first = _firstIcon._pos || [0, 0];
@@ -168,7 +175,7 @@ var Animation = (animateIcons, pointer, settings) => {
       f.p *= 0.6 * (1 + settings.animation_magnify);
 
       // rise
-      let sz = (settings.iconSize * f.p - settings.iconSize);
+      let sz = settings.iconSize * f.p - settings.iconSize;
       if (settings.vertical) {
         if (settings.position == 1) {
           a._pos[0] -= sz * 0.8 * settings.animation_rise;

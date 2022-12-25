@@ -63,7 +63,9 @@ var Animation = (animateIcons, pointer, settings) => {
 
   animateIcons.forEach((i) => {
     i._pos = i._pos2;
-    i._targetSpread = Math.floor(settings.iconSpacing * settings.scaleFactor * i._targetScale);
+    i._targetSpread = Math.floor(
+      settings.iconSpacing * settings.scaleFactor * i._targetScale
+    );
   });
 
   let debugDraw = [];
