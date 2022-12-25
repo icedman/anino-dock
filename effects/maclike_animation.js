@@ -7,7 +7,6 @@ var Animation = (animateIcons, pointer, settings) => {
   let second = _secondIcon._pos || [0, 0];
   let last = _lastIcon._pos || [0, 0];
   let nsz = _firstIcon.width;
-  // second[0] - first[0];
 
   let sz = nsz * (6 + 2 * settings.animation_spread);
   let szr = sz / 2;
@@ -16,13 +15,6 @@ var Animation = (animateIcons, pointer, settings) => {
   if (settings.vertical) {
     center = [first[0], py];
   }
-
-  // spread
-  let pad =
-    settings.iconSize *
-    4 *
-    settings.scaleFactor *
-    (settings.animation_spread / 2);
 
   function compute_d(i) {
     let dx = i._pos[0] - center[0];
@@ -34,7 +26,14 @@ var Animation = (animateIcons, pointer, settings) => {
       let dd = 1.0 - Math.abs(dx) / szr;
       i._d = nsz + nsz * settings.animation_magnify * settings.scaleFactor * dd;
     }
+    return i;
   }
+
+  // max scale
+  // let max1 = compute_d({_pos:center})._d / nsz;
+  // let max2 = compute_d({_pos:[center[0] + settings.iconSpacing, center[1]]})._d / nsz;
+  // let max3 = compute_d({_pos:[center[0] + settings.iconSpacing*2, center[1]]})._d / nsz;
+  // log(`${max1} ${max2} ${max3}`);
 
   // compute diameter
   animateIcons.forEach((i) => {

@@ -585,19 +585,13 @@ var Animator = class {
       if (scale < 1.0) {
         scale = 1.0;
       }
-      // scale = scale.toFixed(3);
 
       let targetSpread = Math.floor(iconSpacing * scaleFactor * scale);
 
-      // if (icon._targetScale > 1.0) {
-      //   scaledIcons.push(icon);
-      // }
-      // if (didAnimate && icon._targetScale == 1.0 && scaledIcons.length <= 1) {
-      //   scaledIcons = [icon];
-      // }
-      // if (isWithin) {
-      //   targetSpread = Math.floor(iconSpacing * scaleFactor * 1.1);
-      // }
+      icon._targetSpread = targetSpread;
+      if (icon._targetScale > 1.0) {
+        scaledIcons.push(icon);
+      }
 
       // if (icon._icon.icon_name == 'spotify-client') {
       //   targetSpread += iconSize * scaleFactor;
@@ -606,11 +600,11 @@ var Animator = class {
       //   icon._img.translation_x = 0;
       // }
 
-      if (this.extension._vertical) {
-        icon._container.height = targetSpread;
-      } else {
-        icon._container.width = targetSpread;
-      }
+      // if (this.extension._vertical) {
+      //   icon._container.height = targetSpread;
+      // } else {
+      //   icon._container.width = targetSpread;
+      // }
 
       // scale
       if (!isNaN(scale)) {
@@ -664,14 +658,13 @@ var Animator = class {
       }
     });
 
-    // if (scaledIcons.length) {
-    //   let totalScale = 0;
-    //   let totalWidth = 0;
-    //   scaledIcons.forEach((i) => {
-    //     totalScale += i.scale_x;
-    //     totalWidth += i._container.width;
-    //   });
-    // }
+    animateIcons.forEach((icon) => {
+      if (this.extension._vertical) {
+        icon._container.height = icon._targetSpread;
+      } else {
+        icon._container.width = icon._targetSpread;
+      }
+    });
 
     this._dotsContainer.update({
       icons: animateIcons,
