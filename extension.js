@@ -158,7 +158,6 @@ class Extension {
   }
 
   startUp() {
-    // this._debouncedUpdateStyle();
     this.dashContainer.animator._invisible(true, true);
 
     // todo... refactor this
@@ -166,14 +165,10 @@ class Extension {
       let func = () => {
         this._updateLayout();
         this.animate();
-        if (!this._vertical) {
-          this.dashContainer.animator._invisible(false, false);
-        }
       };
       this._startupSeq = this._hiTimer.runSequence([
         { func, delay: 50 },
         { func, delay: 250 },
-        { func, delay: 500 },
         {
           func: () => {
             this.dashContainer.animator._invisible(false, false);
@@ -266,8 +261,7 @@ class Extension {
           this.dashContainer.createDash();
           this.animator._iconsContainer.clear();
           this.animator.relayout();
-          this._updateLayout();
-          this.animate();
+          this.startUp();
           break;
         }
         case 'apps-icon':
@@ -296,7 +290,8 @@ class Extension {
           this.animator._background.visible = false;
           this._updateStyle();
           this._updateLayout();
-          this.animate();
+          // this.animate();
+          this.startUp();
           break;
         }
         case 'icon-effect': {

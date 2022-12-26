@@ -32,7 +32,7 @@ const DrawOverlay = Me.imports.apps.overlay.DrawOverlay;
 
 const ANIM_POS_COEF = 1.5;
 const ANIM_SCALE_COEF = 2.5;
-const ANIM_ON_LEAVE_COEF = 2.5;
+const ANIM_ON_LEAVE_COEF = 2.0;
 const ANIM_ICON_RAISE = 0.6;
 const ANIM_ICON_SCALE = 1.5;
 const ANIM_ICON_HIT_AREA = 2.5;
@@ -203,27 +203,29 @@ var Animator = class {
     let pointer = global.get_pointer();
     let monitor = this.dashContainer._monitor;
 
+    let padEnd = 0;
+    let padEndPos = '';
     this.dashContainer.dash.style = '';
+
     // center the dash
-    if (this.extension._vertical) {
-      if (
-        this.dashContainer._projectedWidth >
-        this.dashContainer.iconSize * 4
-      ) {
-        let width = this.dashContainer.height;
-        let pad = Math.floor((width - this.dashContainer._projectedWidth) / 2);
-        if (pad > 0) {
-          this.dashContainer.dash.style = `padding-top: ${pad}px;`;
-        }
+    {
+      let width = this.extension._vertical
+        ? this.dashContainer.height
+        : this.dashContainer.width;
+      let padStart = Math.floor((width - this._iconsCount * iconSpacing) / 2);
+      if (this.extension._vertical) {
+        this.dashContainer.dash.style = `padding-top: ${padStart}px;`;
+      } else {
+        this.dashContainer.dash.style = `padding-left: ${padStart}px;`;
       }
     }
 
     if (this.dashContainer._scaleDownExcess) {
-      let pad =
+      padEnd =
         this.dashContainer._scaleDownExcess /
         (this.extension._vertical ? 2 : 8);
-      let pos = this.extension._vertical ? 'bottom' : 'right';
-      this.dashContainer.dash.style += `padding-${pos}: ${pad}px;`;
+      padEndPos = this.extension._vertical ? 'bottom' : 'right';
+      this.dashContainer.dash.style += `padding-${padEndPos}: ${padEnd}px;`;
     }
 
     let pivot = new Point();
@@ -407,12 +409,6 @@ var Animator = class {
     }
 
     let isWithin = this._isWithinDash(pointer);
-    // if (isWithin) {
-    //   this._isWithinCount = (this._isWithinCount || 0) + 1;
-    // } else {
-    //   this._isWithinCount = 0;
-    // }
-
     if (!this._preview && !isWithin) {
       nearestIcon = null;
     }
@@ -481,11 +477,11 @@ var Animator = class {
       let vertical = this.extension._vertical
         ? this.dashContainer._position
         : 0;
-      let F = vertical ? AnimationVertical : Animation;
-      let anim = F(animateIcons, pointer, {
+      let anim = Animation(animateIcons, pointer, {
         iconsCount: animateIcons.length,
         iconSize,
         iconSpacing,
+        dock_position,
         pointer,
         x: this.dashContainer.x,
         y: this.dashContainer.y,
@@ -498,7 +494,31 @@ var Animator = class {
         vertical,
       });
 
-      this.dashContainer.dash.style += `padding-left: ${anim.padLeft}px; padding-right: ${anim.padRight}px;`;
+      this.dashContainer.dash.style = '';
+
+      if (this.extension._vertical) {
+        let padStart = Math.floor(
+          (this.dashContainer.height -
+            (this._iconsCount + 2) * anim.iconSpacing) /
+            2
+        );
+        if (padStart > 0) {
+          this.dashContainer.dash.style = `padding-top: ${padStart}px; padding-bottom: ${
+            anim.padRight + padEnd
+          }px;`;
+        }
+      } else {
+        let padStart = Math.floor(
+          (this.dashContainer.width -
+            (this._iconsCount + 2) * anim.iconSpacing) /
+            2
+        );
+        if (padStart > 0) {
+          this.dashContainer.dash.style = `padding-left: ${
+            padStart + anim.padLeft
+          }px; padding-right: ${anim.padRight + padEnd}px;`;
+        }
+      }
 
       // commit
       animateIcons.forEach((i) => {
@@ -515,8 +535,6 @@ var Animator = class {
         this._overlay.set_size(monitor.width, monitor.height);
         this._overlay.redraw();
       }
-    } else {
-      this.dash.style = '';
     }
 
     if (!nearestIcon) {
@@ -597,12 +615,6 @@ var Animator = class {
       //   icon._img.translation_x = -iconSize/2 * scaleFactor;
       // } else {
       //   icon._img.translation_x = 0;
-      // }
-
-      // if (this.extension._vertical) {
-      //   icon._container.height = targetSpread;
-      // } else {
-      //   icon._container.width = targetSpread;
       // }
 
       // scale

@@ -46,14 +46,17 @@ var Animation = (animateIcons, pointer, settings) => {
     i._targetScale = i._d / nsz;
 
     // rise
-    if (settings.vertical) {
-      if (settings.position == 1) {
-        i._pos2[0] -= (i._d - nsz) * 0.8 * settings.animation_rise;
+    let sz = settings.iconSize * i.p - settings.iconSize;
+    if (sz > 0) {
+      if (settings.vertical) {
+        if (settings.position == 'right') {
+          a._pos[0] -= sz * 0.8 * settings.animation_rise;
+        } else {
+          a._pos[0] += sz * 0.8 * settings.animation_rise;
+        }
       } else {
-        i._pos2[0] += (i._d - nsz) * 0.8 * settings.animation_rise;
+        a._pos[1] -= sz * 0.8 * settings.animation_rise;
       }
-    } else {
-      i._pos2[1] -= (i._d - nsz) * 0.8 * settings.animation_rise;
     }
   });
 
@@ -103,6 +106,7 @@ var Animation = (animateIcons, pointer, settings) => {
     last,
     padLeft: 0,
     padRight: 0,
+    iconSpacing: settings.iconSpacing,
     debugDraw,
   };
 };

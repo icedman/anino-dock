@@ -21,11 +21,11 @@ let _preferredIconSizes = null;
 
 var Dock = GObject.registerClass(
   {},
-  class AninoDock extends St.BoxLayout {
+  class AninoDock extends St.Widget {
     _init() {
       super._init({
         name: 'aninoDock',
-        vertical: true,
+        // vertical: true,
         reactive: true,
         track_hover: true,
       });
@@ -527,7 +527,7 @@ var Dock = GObject.registerClass(
       this.iconSize = iconSize;
 
       this.dash.visible = true;
-      this.vertical = !this.extension._vertical;
+      // this.vertical = !this.extension._vertical;
 
       // check should disable hide
       this._disableAutohide = false;

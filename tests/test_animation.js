@@ -109,6 +109,123 @@ function gen_frames(settings) {
       y: 0,
       w: iconSpacing,
       h: iconSpacing,
+      l: iconSpacing,
+      r: 0,
+      p: 1,
+    });
+  }
+
+  function total_length() {
+    let tl = 0;
+    frames.forEach((f) => {
+      tl += f.l;
+    });
+    return tl;
+  }
+
+  function reposition() {
+    let tl = total_length();
+    let r1 = width / 2 - tl / 2;
+    frames.forEach((f) => {
+      f.r = r1;
+      r1 += f.l;
+    });
+  }
+
+  reposition();
+
+  if (pointer) {
+    let left = [];
+    let center = [];
+    let right = [];
+
+    let thresh = iconSpacing * 3;
+    let thresh2 = thresh / 2;
+    let cx = pointer[1];
+    let cy = pointer[2];
+
+    let doLeft = true;
+    let doRight = false;
+    let totalP = 0;
+
+    frames.forEach((f) => {
+      let ir = f.r + f.l / 2;
+      let dr = ir - cx;
+      dr = Math.sqrt(dr * dr);
+      f.p = 1;
+      if (dr < thresh2) {
+        f.in = true;
+        let p = 1 - dr / thresh2;
+        f.p = 1 + p * 0.8;
+        totalP += f.p;
+        doLeft = false;
+        center.push(f);
+      } else {
+        if (!doLeft) {
+          doRight = true;
+        }
+      }
+      if (doLeft) {
+        left.push(f);
+      }
+      if (doRight) {
+        right.push(f);
+      }
+    });
+
+    if (totalP > 0) {
+      let tw = (iconsCount + 1) * iconSpacing;
+      let r1 = width / 2 - tw / 2;
+      let leftX = r1;
+      left.forEach((f) => {
+        f.r = r1;
+        r1 += f.l;
+        leftX = r1;
+      });
+      r1 = width / 2 + tw / 2 - right.length * iconSpacing;
+      right.forEach((f) => {
+        f.r = r1;
+        r1 += f.l;
+      });
+      let rightX =
+        leftX + (iconsCount - left.length - right.length + 1) * iconSpacing;
+      let area = rightX - leftX;
+      // Drawing.draw_line(ctx, [1, 0, 0, 1], 1, leftX, ccy, rightX, ccy);
+
+      let usedArea = 0;
+      center.forEach((f) => {
+        f.r = leftX;
+        f.l = area * (f.p / totalP);
+        leftX += f.l;
+        usedArea += f.l;
+      });
+
+      let diff = area - usedArea;
+      center[0].l += diff;
+    }
+  }
+
+  // commit
+
+  frames.forEach((f) => {
+    f.x = f.r;
+    f.w = f.l;
+  });
+
+  return frames;
+}
+
+function _gen_frames(settings) {
+  let { iconsCount, iconSize, iconSpacing, pointer, width, height } = settings;
+
+  let frames = [];
+  for (let i = 0; i < iconsCount; i++) {
+    frames.push({
+      idx: i,
+      x: 0,
+      y: 0,
+      w: iconSpacing,
+      h: iconSpacing,
       p: 1,
     });
   }
