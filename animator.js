@@ -174,6 +174,8 @@ var Animator = class {
   }
 
   _animate() {
+    // todo ... simplify the entire function
+
     if (!this._iconsContainer || !this.dashContainer) return;
     this.dash = this.dashContainer.dash;
 
@@ -213,10 +215,12 @@ var Animator = class {
         ? this.dashContainer.height
         : this.dashContainer.width;
       let padStart = Math.floor((width - this._iconsCount * iconSpacing) / 2);
-      if (this.extension._vertical) {
-        this.dashContainer.dash.style = `padding-top: ${padStart}px;`;
-      } else {
-        this.dashContainer.dash.style = `padding-left: ${padStart}px;`;
+      if (padStart > 0) {
+        if (this.extension._vertical) {
+          this.dashContainer.dash.style = `padding-top: ${padStart}px;`;
+        } else {
+          this.dashContainer.dash.style = `padding-left: ${padStart}px;`;
+        }
       }
     }
 
@@ -510,7 +514,7 @@ var Animator = class {
       } else {
         let padStart = Math.floor(
           (this.dashContainer.width -
-            (this._iconsCount + 2) * anim.iconSpacing) /
+            (this._iconsCount + 3) * anim.iconSpacing) /
             2
         );
         if (padStart > 0) {
@@ -699,7 +703,8 @@ var Animator = class {
     });
 
     if (validPosition && animateIcons.length > 1) {
-      let padding = iconSize * 0.25 * scaleFactor;
+      // todo: add to settings
+      let padding = iconSize * 0.2 + 0.05 * scaleFactor;
       this._background.update({
         first: animateIcons[0],
         last: animateIcons[animateIcons.length - 1],
@@ -896,6 +901,7 @@ var Animator = class {
     }
   }
 
+  // todo: move to dockIcon
   _onButtonEvent(obj, evt) {
     Main._lastButtonEvent = evt;
     let pressed = evt.type() == Clutter.EventType.BUTTON_PRESS;
@@ -923,6 +929,7 @@ var Animator = class {
     }
   }
 
+  // todo: move to dockIcon
   _onScrollEvent(obj, evt) {
     this._lastScrollEvent = evt;
     let pointer = global.get_pointer();

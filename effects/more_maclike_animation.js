@@ -105,7 +105,7 @@ function gen_frames(settings) {
       let usedArea = 0;
       center.forEach((f) => {
         f.r = leftX;
-        f.l = area * (f.p / totalP);
+        f.l = Math.floor(area * (f.p / totalP));
         leftX += f.l;
         usedArea += f.l;
       });
@@ -134,12 +134,13 @@ function gen_frames(settings) {
   }
 
   frames.forEach((f) => {
+    f.l = Math.floor(f.l);
     if (settings.vertical) {
       f.y = Math.floor(f.r);
-      f.h = Math.floor(f.l);
+      f.h = f.l;
     } else {
       f.x = Math.floor(f.r);
-      f.w = Math.floor(f.l);
+      f.w = f.l;
     }
   });
 

@@ -645,6 +645,7 @@ var Dock = GObject.registerClass(
       }
     }
 
+    // todo move to animator
     _bounceIcon(icon) {
       if (!icon) {
         icon = this.animator._iconsContainer.get_children()[0];
