@@ -23,8 +23,10 @@
 * Dock position - left, right layout
 * Scrollwheel to cycle windows
 * Click to maximize/minimize windows
-* Style top panel
+* Style the top panel
+* Style the dash padding, background and border colors
 * Panel mode
+* Panel mode - merge top bar and dash
 * Show/Hide Apps icon
 * Analog clock
 * Dynamic calendar

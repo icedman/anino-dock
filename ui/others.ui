@@ -106,11 +106,28 @@
         <property name="description" translatable="yes">Set colors used in custom drawn widgets.</property>
         <child>
           <object class="AdwActionRow">
-            <property name="title" translatable="yes">Accent Color</property>
-            <property name="subtitle" translatable="yes">Select accent color.</property>
+            <property name="title" translatable="yes">Primary Color</property>
+            <property name="subtitle" translatable="yes">Select primary color.</property>
             <property name="activatable-widget">drawing-accent-color</property>
             <child>
               <object class="GtkColorButton" id="drawing-accent-color">
+                <property name="valign">center</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">70px</property>
+                <property name="height-request">45px</property>
+                <property name="show-editor">true</property>
+                <property name="use-alpha">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Secondary Color</property>
+            <property name="subtitle" translatable="yes">Select secondary color.</property>
+            <property name="activatable-widget">drawing-secondary-color</property>
+            <child>
+              <object class="GtkColorButton" id="drawing-secondary-color">
                 <property name="valign">center</property>
                 <property name="hexpand">false</property>
                 <property name="width-request">70px</property>
@@ -140,11 +157,45 @@
         </child>
         <child>
           <object class="AdwActionRow">
+            <property name="title" translatable="yes">Light Foreground</property>
+            <property name="subtitle" translatable="yes">Select light foreground color.</property>
+            <property name="activatable-widget">drawing-light-foreground</property>
+            <child>
+              <object class="GtkColorButton" id="drawing-light-foreground">
+                <property name="valign">center</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">70px</property>
+                <property name="height-request">45px</property>
+                <property name="show-editor">true</property>
+                <property name="use-alpha">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
             <property name="title" translatable="yes">Dark Color</property>
             <property name="subtitle" translatable="yes">Select dark color.</property>
             <property name="activatable-widget">drawing-dark-color</property>
             <child>
               <object class="GtkColorButton" id="drawing-dark-color">
+                <property name="valign">center</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">70px</property>
+                <property name="height-request">45px</property>
+                <property name="show-editor">true</property>
+                <property name="use-alpha">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Dark Foreground</property>
+            <property name="subtitle" translatable="yes">Select dark foreground color.</property>
+            <property name="activatable-widget">drawing-dark-foreground</property>
+            <child>
+              <object class="GtkColorButton" id="drawing-dark-foreground">
                 <property name="valign">center</property>
                 <property name="hexpand">false</property>
                 <property name="width-request">70px</property>

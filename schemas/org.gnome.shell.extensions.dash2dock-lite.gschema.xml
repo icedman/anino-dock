@@ -263,8 +263,13 @@
     </key>
     <key type="(dddd)" name="drawing-accent-color">
         <default>(1.,0.,0.,1.)</default>
-        <summary>Accent color</summary>
-        <description>Set accent color.</description>
+        <summary>Primary color</summary>
+        <description>Set primary color.</description>
+    </key>
+    <key type="(dddd)" name="drawing-secondary-color">
+        <default>(1.,0.6,0.,1.)</default>
+        <summary>Secondary color</summary>
+        <description>Set secondary color.</description>
     </key>
     <key type="(dddd)" name="drawing-dark-color">
         <default>(0.2, 0.2, 0.2, 1.)</default>
@@ -275,6 +280,16 @@
         <default>(1.,1.,1.,1.)</default>
         <summary>Light color</summary>
         <description>Set light color.</description>
+    </key>
+    <key type="(dddd)" name="drawing-dark-foreground">
+        <default>(0.8, 0.8, 0.8, 1.)</default>
+        <summary>Dark foreground color</summary>
+        <description>Set dark foreground color.</description>
+    </key>
+    <key type="(dddd)" name="drawing-light-foreground">
+        <default>(0.3,0.3,0.3,1.)</default>
+        <summary>Light color</summary>
+        <description>Set light foreground color.</description>
     </key>
   </schema>
 </schemalist>

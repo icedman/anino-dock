@@ -319,7 +319,10 @@ class Extension {
         }
         case 'drawing-accent-color':
         case 'drawing-dark-color':
-        case 'drawing-light-color': {
+        case 'drawing-light-color':
+        case 'drawing-secondary-color':
+        case 'drawing-dark-foreground':
+        case 'drawing-light-foreground': {
           this.services.redraw();
           this._updateLayout();
           this.animate();

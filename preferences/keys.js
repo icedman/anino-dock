@@ -257,12 +257,24 @@ SettingsKeys.setKeys({
     default_value: [1.0, 0, 0, 1.0],
     widget_type: 'color',
   },
+  'drawing-secondary-color': {
+    default_value: [1.0, 0.6, 0, 1.0],
+    widget_type: 'color',
+  },
   'drawing-dark-color': {
     default_value: [0.2, 0.2, 0.2, 1.0],
     widget_type: 'color',
   },
   'drawing-light-color': {
     default_value: [1.0, 1.0, 1.0, 1.0],
+    widget_type: 'color',
+  },
+  'drawing-dark-foreground': {
+    default_value: [0.8, 0.8, 0.8, 1.0],
+    widget_type: 'color',
+  },
+  'drawing-light-foreground': {
+    default_value: [0.3, 0.3, 0.3, 1.0],
     widget_type: 'color',
   },
 });

@@ -1,12 +1,13 @@
 const { Clutter, GObject, GLib, PangoCairo, Pango } = imports.gi;
 const Cairo = imports.cairo;
 
-function draw_rotated_line(ctx, color, width, angle, len) {
+function draw_rotated_line(ctx, color, width, angle, len, offset) {
+  offset = offset || 0;
   ctx.save();
   ctx.rotate(angle);
   set_color(ctx, color, 1);
   ctx.setLineWidth(width);
-  ctx.moveTo(0, 0);
+  ctx.moveTo(0, offset);
   ctx.lineTo(0, len);
   ctx.stroke();
   ctx.restore();

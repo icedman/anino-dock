@@ -9,6 +9,36 @@ const Drawing = Me.imports.drawing.Drawing;
 
 let size = 400;
 
+function DrawClock1(ctx, date, x, y, size, settings) {
+  const { dark_color, light_color, accent_color } = settings;
+
+  let bgSize = size * 0.84;
+
+  const d0 = date;
+  let h0 = d0.getHours();
+  const m0 = d0.getMinutes();
+
+  ctx.save();
+  ctx.translate(x, y);
+  Drawing.draw_circle(ctx, dark_color, 0, 0, bgSize);
+  ctx.moveTo(0, 0);
+  Drawing.draw_rotated_line(
+    ctx,
+    light_color,
+    size / 20,
+    (h0 * 30 + (m0 * 30) / 60) * (Math.PI / 180),
+    -Math.floor(size / 3.7)
+  );
+  Drawing.draw_rotated_line(
+    ctx,
+    accent_color,
+    size / 33,
+    m0 * 6 * (Math.PI / 180),
+    -Math.floor(size / 2.7)
+  );
+  ctx.restore();
+}
+
 var Clock = GObject.registerClass(
   {},
   // todo St.DrawingArea
@@ -38,8 +68,6 @@ var Clock = GObject.registerClass(
     }
 
     on_draw(canvas, ctx, width, height) {
-      const { dark_color, light_color, accent_color } = this.settings;
-
       ctx.setOperator(Cairo.Operator.CLEAR);
       ctx.paint();
 
@@ -48,39 +76,10 @@ var Clock = GObject.registerClass(
       ctx.setLineCap(Cairo.LineCap.ROUND);
       ctx.setOperator(Cairo.Operator.SOURCE);
 
-      let bgSize = size * 0.84;
+      DrawClock1(ctx, new Date(), 0, 0, size, {
+        ...this.settings,
+      });
 
-      // background
-      // ctx.save();
-      // // Drawing.set_color(ctx, dark_color, 1.0);
-      // Drawing.set_color_rgba(ctx, 0.2, 0.2, 0.2, 1.0);
-      // ctx.arc(0, 0, bgSize / 2 - bgSize / 20, 0, 2 * Math.PI);
-      // ctx.fill();
-      // ctx.restore();
-
-      Drawing.draw_circle(ctx, dark_color, 0, 0, bgSize);
-
-      const d0 = new Date();
-      let h0 = d0.getHours();
-      const m0 = d0.getMinutes();
-
-      ctx.save();
-      ctx.moveTo(0, 0);
-      Drawing.draw_rotated_line(
-        ctx,
-        light_color,
-        size / 20,
-        (h0 * 30 + (m0 * 30) / 60) * (Math.PI / 180),
-        -Math.floor(size / 3.7)
-      );
-      Drawing.draw_rotated_line(
-        ctx,
-        accent_color,
-        size / 33,
-        m0 * 6 * (Math.PI / 180),
-        -Math.floor(size / 2.7)
-      );
-      ctx.restore();
       ctx.$dispose();
     }
 

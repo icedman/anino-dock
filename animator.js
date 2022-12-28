@@ -694,7 +694,6 @@ var Animator = class {
     });
 
     if (validPosition && animateIcons.length > 1) {
-      // todo: add to settings
       let padSetting = 0.12 * this.extension.dash_padding;
       let padding = iconSize * (0.2 + padSetting) * scaleFactor;
       this._background.update({
