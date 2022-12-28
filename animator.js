@@ -15,8 +15,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 
 const TintEffect = Me.imports.effects.tint_effect.TintEffect;
 const MonochromeEffect = Me.imports.effects.monochrome_effect.MonochromeEffect;
-const Animation = Me.imports.effects.more_maclike_animation.Animation;
-const AnimationVertical = Me.imports.effects.maclike_animation.Animation;
+const Animation = Me.imports.effects.maclike_animation.Animation;
 const Drawing = Me.imports.drawing.Drawing;
 
 const {
