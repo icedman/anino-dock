@@ -330,6 +330,7 @@ class Extension {
           this._updateAutohide();
           break;
         }
+        case 'dash-padding':
         case 'edge-distance': {
           this.animate();
           break;

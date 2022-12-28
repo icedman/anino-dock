@@ -150,6 +150,11 @@ SettingsKeys.setKeys({
     widget_type: 'scale',
     test: { pointer: 'slide-through', values: [0, 0.5, 1] },
   },
+  'dash-padding': {
+    default_value: 0,
+    widget_type: 'scale',
+    test: { values: [0, 0.5, 1] },
+  },
   'edge-distance': {
     default_value: 0,
     widget_type: 'scale',

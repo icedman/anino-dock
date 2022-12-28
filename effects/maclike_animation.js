@@ -159,7 +159,7 @@ var Animation = (animateIcons, pointer, settings) => {
     magnify *= 0.8;
   }
   if (magnify > 0.5 && spread < 0.55) {
-    spread = 0.55 + spread * 0.2;
+    spread = 0.55 + (spread * 0.2);
   }
   let iconSpacing =
     settings.iconSpacing +
