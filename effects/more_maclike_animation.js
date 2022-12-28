@@ -1,6 +1,14 @@
 function gen_frames(settings) {
-  let { iconsCount, iconSize, iconSpacing, pointer, width, height, debugDraw } =
-    settings;
+  let {
+    iconsCount,
+    iconSize,
+    iconSpacing,
+    scaleFactor,
+    pointer,
+    width,
+    height,
+    debugDraw,
+  } = settings;
 
   let dashWidth = width;
   if (settings.vertical) {
@@ -45,7 +53,7 @@ function gen_frames(settings) {
     let center = [];
     let right = [];
 
-    let thresh = iconSpacing * 3.5;
+    let thresh = iconSpacing * 3.5 * scaleFactor;
     let thresh2 = thresh / 2;
     let cx = pointer[0];
     let cy = pointer[1];
@@ -67,7 +75,7 @@ function gen_frames(settings) {
       if (dr < thresh2) {
         f.in = true;
         let p = 1 - dr / thresh2;
-        f.p = 1 + p * 0.8;
+        f.p = 1 + p * 0.7;
         totalP += f.p;
         doLeft = false;
         center.push(f);
@@ -154,11 +162,17 @@ var Animation = (animateIcons, pointer, settings) => {
   let first = _firstIcon._pos || [0, 0];
   let last = _lastIcon._pos || [0, 0];
 
+  let spread = settings.animation_spread;
+  let magnify = settings.animation_magnify;
+  if (spread < 0.2) {
+    magnify *= 0.8;
+  }
+  if (magnify > 0.5 && spread < 0.55) {
+    spread += 0.55;
+  }
   let iconSpacing =
     settings.iconSpacing +
-    settings.iconSpacing *
-      (settings.vertical ? 0.1 : 0.2) *
-      settings.animation_spread;
+    settings.iconSpacing * (settings.vertical ? 0.1 : 0.2) * spread;
 
   let debugDraw = [];
   let frames = gen_frames({
@@ -210,7 +224,7 @@ var Animation = (animateIcons, pointer, settings) => {
   animateIcons.forEach((a) => {
     let f = frames[idx++];
     if (f && f.p > 1) {
-      f.p *= 0.6 * (1 + settings.animation_magnify);
+      f.p *= 0.6 * (1 + magnify);
 
       // rise
       let sz = settings.iconSize * f.p - settings.iconSize;

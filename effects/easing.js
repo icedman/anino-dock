@@ -1,5 +1,7 @@
 'use strict';
 
+// time, start, travel, duration
+
 /* PennerEasing */
 var Linear = {
   easeNone: (t, b, c, d) => {
