@@ -45,7 +45,7 @@ function gen_frames(settings) {
     let center = [];
     let right = [];
 
-    let thresh = iconSpacing * 3;
+    let thresh = iconSpacing * 3.5;
     let thresh2 = thresh / 2;
     let cx = pointer[0];
     let cy = pointer[1];
@@ -154,17 +154,16 @@ var Animation = (animateIcons, pointer, settings) => {
   let first = _firstIcon._pos || [0, 0];
   let last = _lastIcon._pos || [0, 0];
 
-  let iconSpacing = Math.floor(
+  let iconSpacing =
     settings.iconSpacing +
-      settings.iconSpacing *
-        (settings.vertical ? 0.1 : 0.2) *
-        settings.animation_spread
-  );
+    settings.iconSpacing *
+      (settings.vertical ? 0.1 : 0.2) *
+      settings.animation_spread;
 
   let debugDraw = [];
   let frames = gen_frames({
     ...settings,
-    iconSpacing,
+    iconSpacing: Math.floor(iconSpacing * settings.scaleFactor),
     pointer: [
       settings.pointer[0] - settings.x,
       settings.pointer[1] - settings.y,

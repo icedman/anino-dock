@@ -23,10 +23,11 @@ const {
   IconsContainer,
   DotsContainer,
   DockExtension,
-  DockBackground,
   DockOverlay,
   explodeDashIcon,
 } = Me.imports.dockItems;
+
+const { DockBackground } = Me.imports.background;
 
 const DrawOverlay = Me.imports.apps.overlay.DrawOverlay;
 
@@ -214,7 +215,10 @@ var Animator = class {
       let width = this.extension._vertical
         ? this.dashContainer.height
         : this.dashContainer.width;
-      let padStart = Math.floor((width - this._iconsCount * iconSpacing) / 2);
+      let padStart = Math.floor(
+        width / scaleFactor / 2 - (this._iconsCount / 2) * iconSpacing
+      );
+      // note: provide unscale values to styles
       if (padStart > 0) {
         if (this.extension._vertical) {
           this.dashContainer.dash.style = `padding-top: ${padStart}px;`;
@@ -388,7 +392,7 @@ var Animator = class {
 
       icon._target = pos;
       icon._targetScale = 1;
-      icon._targetSpread = iconSpacing;
+      icon._targetSpread = iconSpacing * scaleFactor;
 
       if (this.extension._vertical) {
         //
@@ -470,10 +474,6 @@ var Animator = class {
       py = nearestIcon._pos[1];
     }
 
-    // icons will spreadout when pointer hovers over the dash
-    let icon_spacing =
-      iconSize * (1.2 + this.extension.animation_spread / 4) * scaleFactor;
-
     // animation behavior
     if (animateIcons.length && nearestIcon) {
       let animation_type = this.extension.animation_type;
@@ -491,7 +491,7 @@ var Animator = class {
         y: this.dashContainer.y,
         width: this.dashContainer.width,
         height: this.dashContainer.height,
-        scaleFactor: 1.0,
+        scaleFactor,
         animation_rise: this.extension.animation_rise * ANIM_ICON_RAISE,
         animation_magnify: this.extension.animation_magnify * ANIM_ICON_SCALE,
         animation_spread: this.extension.animation_spread,
@@ -500,27 +500,26 @@ var Animator = class {
 
       this.dashContainer.dash.style = '';
 
-      if (this.extension._vertical) {
+      {
+        let width = this.extension._vertical
+          ? this.dashContainer.height
+          : this.dashContainer.width;
+
         let padStart = Math.floor(
-          (this.dashContainer.height -
-            (this._iconsCount + 2) * anim.iconSpacing) /
-            2
+          width / scaleFactor / 2 -
+            ((this._iconsCount + 1) / 2) * anim.iconSpacing
         );
+        // note: provide unscale values to styles
         if (padStart > 0) {
-          this.dashContainer.dash.style = `padding-top: ${padStart}px; padding-bottom: ${
-            anim.padRight + padEnd
-          }px;`;
-        }
-      } else {
-        let padStart = Math.floor(
-          (this.dashContainer.width -
-            (this._iconsCount + 3) * anim.iconSpacing) /
-            2
-        );
-        if (padStart > 0) {
-          this.dashContainer.dash.style = `padding-left: ${
-            padStart + anim.padLeft
-          }px; padding-right: ${anim.padRight + padEnd}px;`;
+          if (this.extension._vertical) {
+            this.dashContainer.dash.style = `padding-top: ${padStart}px; padding-bottom: ${
+              padEnd + anim.padRight
+            }px;`;
+          } else {
+            this.dashContainer.dash.style = `padding-left: ${
+              padStart // + anim.padLeft
+            }px; padding-right: ${anim.padRight + padEnd}px;`;
+          }
         }
       }
 
@@ -614,13 +613,6 @@ var Animator = class {
         scale = 1.0;
       }
 
-      // if (icon._icon.icon_name == 'spotify-client') {
-      //   targetSpread += iconSize * scaleFactor;
-      //   icon._img.translation_x = -iconSize/2 * scaleFactor;
-      // } else {
-      //   icon._img.translation_x = 0;
-      // }
-
       // scale
       if (!isNaN(scale)) {
         icon.set_scale(scale + scaleJump, scale + scaleJump);
@@ -704,7 +696,8 @@ var Animator = class {
 
     if (validPosition && animateIcons.length > 1) {
       // todo: add to settings
-      let padding = iconSize * 0.2 + 0.05 * scaleFactor;
+      let padSetting = 0.12 * 0.5;
+      let padding = iconSize * (0.2 + padSetting) * scaleFactor;
       this._background.update({
         first: animateIcons[0],
         last: animateIcons[animateIcons.length - 1],
