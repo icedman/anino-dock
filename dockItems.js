@@ -67,6 +67,7 @@ var DockIcon = GObject.registerClass(
         this.add_child(this._icon);
       }
       this.visible = true;
+      this._icon.opacity = this._hide ? 0 : 255;
     }
   }
 );

@@ -427,6 +427,10 @@ var Services = class {
           dark_color: this.extension.drawing_dark_color,
           light_color: this.extension.drawing_light_color,
           accent_color: this.extension.drawing_accent_color,
+          dark_foreground: this.extension.drawing_dark_foreground,
+          light_foreground: this.extension.drawing_light_foreground,
+          secondary_color: this.extension.drawing_secondary_color,
+          clock_style: this.extension.clock_style,
         };
         w.redraw();
       }
@@ -464,6 +468,7 @@ var Services = class {
           didCreate = true;
         }
         if (p.clock) {
+          p.clock._icon = icon;
           let scale =
             icon.icon_size / this.extension.icon_quality / CANVAS_SIZE;
           scale *= scaleFactor;

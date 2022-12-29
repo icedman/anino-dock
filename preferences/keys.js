@@ -122,6 +122,10 @@ SettingsKeys.setKeys({
     default_value: false,
     widget_type: 'switch',
   },
+  'clock-style': {
+    default_value: 0,
+    widget_type: 'dropdown',
+  },
   'calendar-icon': {
     default_value: false,
     widget_type: 'switch',

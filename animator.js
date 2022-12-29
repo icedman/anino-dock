@@ -214,17 +214,16 @@ var Animator = class {
       let width = this.extension._vertical
         ? this.dashContainer.height
         : this.dashContainer.width;
-      let padStart = Math.floor(
-        width / scaleFactor / 2 - (this._iconsCount / 2) * iconSpacing
-      );
-      // note: provide unscale values to styles
-      if (padStart > 0) {
-        if (this.extension._vertical) {
-          this.dashContainer.dash.style = `padding-top: ${padStart}px;`;
-        } else {
-          this.dashContainer.dash.style = `padding-left: ${padStart}px;`;
-        }
-      }
+      this.dashContainer.dash.x =
+        width / 2 - (this._iconsCount * iconSpacing * scaleFactor) / 2;
+    }
+
+    if (this.dashContainer._scaleDownExcess) {
+      padEnd =
+        this.dashContainer._scaleDownExcess /
+        (this.extension._vertical ? 2 : 8);
+      let pos = this.extension._vertical ? 'bottom' : 'right';
+      this.dashContainer.dash.style += `padding-${pos}: ${padEnd}px;`;
     }
 
     if (this.dashContainer._scaleDownExcess) {
@@ -504,21 +503,17 @@ var Animator = class {
           ? this.dashContainer.height
           : this.dashContainer.width;
 
-        let padStart = Math.floor(
-          width / scaleFactor / 2 -
-            ((this._iconsCount + 1) / 2) * anim.iconSpacing
-        );
-        // note: provide unscale values to styles
-        if (padStart > 0) {
-          if (this.extension._vertical) {
-            this.dashContainer.dash.style = `padding-top: ${padStart}px; padding-bottom: ${
-              padEnd + anim.padRight
-            }px;`;
-          } else {
-            this.dashContainer.dash.style = `padding-left: ${
-              padStart // + anim.padLeft
-            }px; padding-right: ${anim.padRight + padEnd}px;`;
-          }
+        this.dashContainer.dash.x =
+          width / 2 -
+          ((this._iconsCount + 1) * anim.iconSpacing * scaleFactor) / 2;
+        if (this.extension._vertical) {
+          this.dashContainer.dash.style = `padding-bottom: ${
+            padEnd + anim.padRight
+          }px;`;
+        } else {
+          this.dashContainer.dash.style = `padding-right: ${
+            padEnd + anim.padRight
+          }px;`;
         }
       }
 

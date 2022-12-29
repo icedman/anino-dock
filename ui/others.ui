@@ -87,6 +87,20 @@
           </object>
         </child>
         <child>
+          <object class="AdwActionRow" id="clock-style-row">
+            <property name="visible">true</property>
+            <property name="title" translatable="yes">Clock Style</property>
+            <property name="subtitle" translatable="yes">Set clock style.</property>
+            <property name="activatable-widget">clock-style</property>
+            <child>
+              <object class="GtkDropDown" id="clock-style">
+                <property name="valign">center</property>
+                <property name="model">clock-style-model</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Calendar</property>
             <property name="subtitle" translatable="yes">Show an calendar widget. Requires Calendar app (gnome-calendar) pinned to the dash.</property>
@@ -208,5 +222,15 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkStringList" id="clock-style-model">
+    <items>
+      <item translatable="yes">Style 1</item>
+      <item>Style 2</item>
+      <item>Style 3</item>
+      <item>Style 4</item>
+      <item>Style 5</item>
+      <item>Style 6</item>
+    </items>
   </object>
 </interface>

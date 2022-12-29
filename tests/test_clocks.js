@@ -10,11 +10,17 @@ const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 
 function _drawFrame(ctx, size, settings) {
+  if (!settings.frame) {
+    return;
+  }
+  let { background, border, borderWidth } = settings.frame;
+
   ctx.save();
   let bgSize = size * 0.9;
+  // frame background
   Drawing.draw_rounded_rect(
     ctx,
-    settings.accent_color,
+    background,
     -bgSize / 2,
     -bgSize / 2,
     bgSize,
@@ -22,36 +28,54 @@ function _drawFrame(ctx, size, settings) {
     0,
     18
   );
-  Drawing.draw_rounded_rect(
-    ctx,
-    [1, 1, 0, 1],
-    -bgSize / 2,
-    -bgSize / 2,
-    bgSize,
-    bgSize,
-    2,
-    18
-  );
+  // frame border
+  if (borderWidth) {
+    Drawing.draw_rounded_rect(
+      ctx,
+      border,
+      -bgSize / 2,
+      -bgSize / 2,
+      bgSize,
+      bgSize,
+      borderWidth,
+      18
+    );
+  }
   ctx.restore();
 }
 
 function _drawDial(ctx, size, settings) {
+  if (!settings.dial) {
+    return;
+  }
+  let { background, border, borderWidth } = settings.dial;
+
   ctx.save();
   let bgSize = size * 0.84;
-  Drawing.draw_circle(ctx, settings.dark_color, 0, 0, bgSize);
-  Drawing.draw_circle(ctx, [1, 1, 0, 1], 0, 0, bgSize, 2);
+  // dial background
+  Drawing.draw_circle(ctx, background, 0, 0, bgSize);
+  // dial border
+  if (borderWidth) {
+    Drawing.draw_circle(ctx, border, 0, 0, bgSize, borderWidth);
+  }
   ctx.restore();
 }
 
 function _drawMarks(ctx, size, settings) {
+  if (!settings.marks) {
+    return;
+  }
+  let { color, width } = settings.marks;
+
   ctx.save();
   for (let i = 0; i < 12; i++) {
     let a = (360 / 12) * i;
     let mark = size * 0.75;
     Drawing.draw_rotated_line(
       ctx,
-      settings.accent_color,
-      size / 33,
+      color,
+      width,
+      // size / 33,
       a * (Math.PI / 180),
       -Math.floor((size * 0.9) / 2.7),
       -Math.floor(mark / 2.7)
@@ -60,13 +84,31 @@ function _drawMarks(ctx, size, settings) {
   ctx.restore();
 }
 
-function _drawClock(ctx, date, x, y, size, settings) {
-  const { dark_color, light_color, accent_color } = settings;
-
+function _drawHands(ctx, size, date, settings) {
+  const { hour, minute, second } = settings.hands;
   const d0 = date;
   let h0 = d0.getHours();
   const m0 = d0.getMinutes();
 
+  // hands
+  Drawing.draw_rotated_line(
+    ctx,
+    minute,
+    size / 20,
+    (h0 * 30 + (m0 * 30) / 60) * (Math.PI / 180),
+    -Math.floor(size / 3.7)
+  );
+  Drawing.draw_circle(ctx, minute, 0, 0, size / 12);
+  Drawing.draw_rotated_line(
+    ctx,
+    hour,
+    size / 33,
+    m0 * 6 * (Math.PI / 180),
+    -Math.floor(size / 2.7)
+  );
+}
+
+function _drawClock(ctx, date, x, y, size, settings) {
   ctx.save();
   ctx.translate(x, y);
   ctx.moveTo(0, 0);
@@ -74,22 +116,7 @@ function _drawClock(ctx, date, x, y, size, settings) {
   _drawFrame(ctx, size, settings);
   _drawDial(ctx, size, settings);
   _drawMarks(ctx, size, settings);
-
-  // hands
-  Drawing.draw_rotated_line(
-    ctx,
-    light_color,
-    size / 20,
-    (h0 * 30 + (m0 * 30) / 60) * (Math.PI / 180),
-    -Math.floor(size / 3.7)
-  );
-  Drawing.draw_rotated_line(
-    ctx,
-    accent_color,
-    size / 33,
-    m0 * 6 * (Math.PI / 180),
-    -Math.floor(size / 2.7)
-  );
+  _drawHands(ctx, size, date, settings);
 
   ctx.restore();
 }
@@ -194,10 +221,32 @@ App.prototype.draw = function (area, ctx) {
 
   Drawing.draw_line(ctx, [1, 1, 0, 1], 1, 0, 0, width, height);
 
-  _drawClock(ctx, new Date(), 100, 100, 100, {
+  let settings = {
     dark_color: [0, 0, 0, 1],
     light_color: [1, 1, 1, 1],
     accent_color: [1, 0, 0, 1],
+  };
+  _drawClock(ctx, new Date(), 100, 100, 100, {
+    ...settings,
+    hands: {
+      hour: [1, 0, 0, 1],
+      minute: [0, 0, 0, 1],
+      second: [0, 0, 0, 1],
+    },
+    marks: {
+      color: [0.5, 0.5, 0.5, 1],
+      width: 1,
+    },
+    dial: {
+      background: [1.0, 1.0, 1.0, 1],
+      border: [0.85, 0.85, 0.85, 1],
+      borderWidth: 2,
+    },
+    frame: {
+      background: [0.5, 0.5, 0.5, 1],
+      border: [0.25, 0.25, 0.25, 1],
+      borderWidth: 0,
+    },
   });
 
   ctx.restore();

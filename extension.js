@@ -317,6 +317,7 @@ class Extension {
           this.animate();
           break;
         }
+        case 'clock-style':
         case 'drawing-accent-color':
         case 'drawing-dark-color':
         case 'drawing-light-color':
