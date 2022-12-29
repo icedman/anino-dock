@@ -197,7 +197,7 @@ var Clock = GObject.registerClass(
 
       switch (this.settings.clock_style) {
         // framed clocks
-        case 5: {
+        case 9: {
           style.dial.size = 0.92;
           style.dial.background = light_color;
           style.hands.minute = dark_color;
@@ -206,15 +206,71 @@ var Clock = GObject.registerClass(
           style.marks.width = 2;
           break;
         }
-        case 4: {
+        case 8: {
           style.dial.size = 0.92;
           style.frame.background = dark_foreground;
           style.marks.color = dark_foreground;
           style.marks.width = 2;
           break;
         }
+        case 7: {
+          style.dial.size = 0.92;
+          style.dial.background = light_color;
+          style.hands.minute = dark_color;
+          style.frame.background = light_foreground;
+          style = {
+            ...style,
+            marks: null,
+          };
+          break;
+        }
+        case 6: {
+          style.dial.size = 0.92;
+          style.frame.background = dark_foreground;
+          style.marks.color = dark_foreground;
+          style.marks.width = 2;
+          style = {
+            ...style,
+            marks: null,
+          };
+          break;
+        }
 
         // round clocks
+        case 5: {
+          style.dial.size = 0.95;
+          style.dial.border = dark_color;
+          style.dial.borderWidth = 3;
+          style.dial.background = light_color;
+          style.hands.minute = dark_color;
+          style.marks.color = light_foreground;
+          style.marks.width = 2;
+          style = {
+            ...style,
+            frame: null,
+          };
+          if (_icon) {
+            _icon._hide = true;
+          }
+          break;
+        }
+        case 4: {
+          style.dial.size = 0.95;
+          style.dial.border = light_color;
+          style.dial.borderWidth = 3;
+          style.dial.background = dark_color;
+          style.marks.color = dark_foreground;
+          style.marks.width = 2;
+          style = {
+            ...style,
+            frame: null,
+          };
+          if (_icon) {
+            _icon._hide = true;
+          }
+          break;
+        }
+
         case 3: {
           style.dial.size = 0.95;
           style.dial.border = dark_color;

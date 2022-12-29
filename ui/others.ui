@@ -225,12 +225,16 @@
   </object>
   <object class="GtkStringList" id="clock-style-model">
     <items>
-      <item translatable="yes">Style 1</item>
-      <item>Style 2</item>
-      <item>Style 3</item>
-      <item>Style 4</item>
-      <item>Style 5</item>
-      <item>Style 6</item>
+      <item translatable="yes">Overlay 1</item>
+      <item>Overlay 2</item>
+      <item>Round 1</item>
+      <item>Round 2</item>
+      <item>Round 3</item>
+      <item>Round 4</item>
+      <item>Framed 1</item>
+      <item>Framed 2</item>
+      <item>Framed 3</item>
+      <item>Framed 4</item>
     </items>
   </object>
 </interface>
