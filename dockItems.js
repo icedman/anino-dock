@@ -27,6 +27,7 @@ var DockIcon = GObject.registerClass(
     }
 
     update(params) {
+      let should_hide = false;
       let gicon = null;
       let icon_gfx = params.icon?.icon_name;
       if (params.icon?.gicon) {
@@ -67,7 +68,10 @@ var DockIcon = GObject.registerClass(
         this.add_child(this._icon);
       }
       this.visible = true;
-      this._icon.opacity = this._hide ? 0 : 255;
+      if (this.last_child) {
+        should_hide = this.last_child._hide;
+      }
+      this._icon.opacity = should_hide ? 0 : 255;
     }
   }
 );

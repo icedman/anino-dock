@@ -28,7 +28,7 @@
 * Panel mode
 * Panel mode - merge top bar and dash
 * Show/Hide Apps icon
-* Analog clock
+* Analog clock - with custom watchfaces
 * Dynamic calendar
 * Dynamic trash icon
 * Mounted devices

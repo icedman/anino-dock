@@ -14,6 +14,7 @@ function _drawFrame(ctx, size, settings) {
     return;
   }
   let { background, border, borderWidth } = settings.frame;
+  let radius = 18;
 
   ctx.save();
   let bgSize = size * settings.frame.size;
@@ -26,7 +27,7 @@ function _drawFrame(ctx, size, settings) {
     bgSize,
     bgSize,
     0,
-    18
+    radius
   );
   // frame border
   if (borderWidth) {
@@ -38,7 +39,7 @@ function _drawFrame(ctx, size, settings) {
       bgSize,
       bgSize,
       borderWidth,
-      18
+      radius
     );
   }
   ctx.restore();
@@ -166,10 +167,7 @@ var Clock = GObject.registerClass(
         light_foreground,
       } = this.settings;
 
-      let _icon = this._icon?.get_parent();
-      if (_icon) {
-        _icon._hide = false;
-      }
+      this._hide = false;
 
       // do not change ... affects styles 0, 1
       let style = {
@@ -249,9 +247,7 @@ var Clock = GObject.registerClass(
             ...style,
             frame: null,
           };
-          if (_icon) {
-            _icon._hide = true;
-          }
+          this._hide = true;
           break;
         }
         case 4: {
@@ -265,9 +261,7 @@ var Clock = GObject.registerClass(
             ...style,
             frame: null,
           };
-          if (_icon) {
-            _icon._hide = true;
-          }
+          this._hide = true;
           break;
         }
 

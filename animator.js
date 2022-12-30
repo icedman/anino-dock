@@ -190,6 +190,7 @@ var Animator = class {
       this._relayout--;
     }
 
+    // todo! << fix
     if (this._throttleDown) {
       this._throttleDown--;
       if (this._throttleDown > 0 && this._throttleDown < THROTTLE_DOWN_FRAMES) {
@@ -448,6 +449,7 @@ var Animator = class {
     }
 
     let didAnimate = false;
+    let didScale = false;
 
     let off = (iconSize * scaleFactor) / 2;
     animateIcons.forEach((i) => {
@@ -498,6 +500,7 @@ var Animator = class {
 
       this.dashContainer.dash.style = '';
 
+      // re-center the dash
       {
         let width = this.extension._vertical
           ? this.dashContainer.height
@@ -548,12 +551,6 @@ var Animator = class {
     let dotIndex = 0;
     let has_errors = false;
 
-    // let scaledIcons = [];
-
-    // todo
-    // all icons scale up (scaleJump 0.08) when cursor within hover area
-    let scaleJump = 0; // this._inDash ? 0.08 : 0;
-
     // animate to target scale and position
     // todo .. make this velocity based
     animateIcons.forEach((icon) => {
@@ -562,7 +559,7 @@ var Animator = class {
       let fromScale = icon.get_scale()[0];
 
       if (icon._targetScale > 1.2) {
-        didAnimate = true;
+        didScale = true;
       }
 
       // could happen at login? < recheck
@@ -609,30 +606,17 @@ var Animator = class {
 
       // scale
       if (!isNaN(scale)) {
-        icon.set_scale(scale + scaleJump, scale + scaleJump);
+        icon.set_scale(scale, scale);
       }
 
       if (!isNaN(pos[0]) && !isNaN(pos[1])) {
-        if (didAnimate) {
-          if (!icon._anchor) {
-            icon._anchor = pos;
-          } else {
-            let coef = 1 + this._isWithinCount / 8;
-            icon._anchor[ix] *= coef;
-            icon._anchor[ix] += pos[ix];
-            icon._anchor[ix] /= coef + 1;
-            icon._anchor[iy] = pos[iy];
-          }
-          let diff = Math.sqrt(icon._anchor[ix] - pos[ix]);
-          if (diff < 8) {
-            pos = [...icon._anchor];
-          }
-        }
-
         icon.set_position(pos[0], pos[1]);
         icon._pos = [...pos];
         icon._scale = scale;
 
+        //---------------------
+        // handle label position
+        //---------------------
         // todo find appsButton._label
         if (icon._label && !this._dragging) {
           if (icon == nearestIcon) {
@@ -657,9 +641,8 @@ var Animator = class {
           }
         }
       }
-    });
 
-    animateIcons.forEach((icon) => {
+      // spread out
       if (this.extension._vertical) {
         icon._container.height = icon._targetSpread;
       } else {
@@ -758,9 +741,10 @@ var Animator = class {
       this._dockExtension.style = Main.panel.first_child.style;
     }
 
-    if (didAnimate || this._dragging) {
+    if (didScale || this._dragging) {
       this._debounceEndAnimation();
-    } else if (this._throttleDown <= 0) {
+    }
+    if (!didAnimate && !this._dragging && this._throttleDown <= 0) {
       this._throttleDown = THROTTLE_DOWN_FRAMES + THROTTLE_DOWN_DELAY_FRAMES;
     }
   }
