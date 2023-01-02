@@ -124,6 +124,7 @@ var IconsContainer = GObject.registerClass(
           app: _appwell?.app?.get_id(),
         });
 
+        // this is the graphics, used by maybeBounce
         container._renderedIcon = _icon;
 
         _icon._appwell = _appwell;

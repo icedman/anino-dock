@@ -16,6 +16,8 @@ const Bounce = Me.imports.effects.easing.Bounce;
 const Linear = Me.imports.effects.easing.Linear;
 
 const EDGE_DISTANCE = 20;
+const MIN_SCROLL_RESOLUTION = 4;
+const MAX_SCROLL_RESOLUTION = 10;
 
 let _preferredIconSizes = null;
 
@@ -29,6 +31,8 @@ var Dock = GObject.registerClass(
         reactive: true,
         track_hover: true,
       });
+
+      this._scrollCounter = 0;
 
       let pivot = new Point();
       pivot.x = 0.5;
@@ -170,16 +174,6 @@ var Dock = GObject.registerClass(
 
       Main.layoutManager.removeChrome(this);
       this._onChrome = false;
-    }
-
-    _onScrollEvent(obj, evt) {
-      this.listeners
-        .filter((l) => {
-          return l._enabled;
-        })
-        .forEach((l) => {
-          if (l._onScrollEvent) l._onScrollEvent(obj, evt);
-        });
     }
 
     _onButtonEvent(obj, evt) {
@@ -527,7 +521,6 @@ var Dock = GObject.registerClass(
       this.iconSize = iconSize;
 
       this.dash.visible = true;
-      // this.vertical = !this.extension._vertical;
 
       // check should disable hide
       this._disableAutohide = false;
@@ -639,7 +632,6 @@ var Dock = GObject.registerClass(
       }
       if (container.child.app && !container.child.app.get_n_windows()) {
         if (container._renderedIcon) {
-          Main._renderedIcon = container._renderedIcon;
           this._bounceIcon(container._renderedIcon);
         }
       }
@@ -700,6 +692,113 @@ var Dock = GObject.registerClass(
           },
         },
       ]);
+    }
+
+    _lockCycle() {
+      if (this._lockedCycle) return;
+      this._lockedCycle = true;
+      this.extension._hiTimer.runOnce(() => {
+        this._lockedCycle = false;
+      }, 500);
+    }
+
+    _cycleWindows(app, evt) {
+      if (this._lockedCycle) {
+        this._scrollCounter = 0;
+        return false;
+      }
+
+      let focusId = 0;
+      let workspaceManager = global.workspace_manager;
+      let activeWs = workspaceManager.get_active_workspace();
+
+      let windows = app.get_windows();
+
+      if (evt.modifier_state & Clutter.ModifierType.CONTROL_MASK) {
+        windows = windows.filter((w) => {
+          return activeWs == w.get_workspace();
+        });
+      }
+
+      let nw = windows.length;
+      windows.sort((w1, w2) => {
+        return w1.get_id() > w2.get_id() ? -1 : 1;
+      });
+
+      if (nw > 1) {
+        for (let i = 0; i < nw; i++) {
+          if (windows[i].has_focus()) {
+            focusId = i;
+          }
+          if (windows[i].is_hidden()) {
+            windows[i].unminimize();
+            windows[i].raise();
+          }
+        }
+
+        let current_focus = focusId;
+
+        if (this._scrollCounter < -1 || this._scrollCounter > 1) {
+          focusId += Math.round(this._scrollCounter);
+          if (focusId < 0) {
+            focusId = nw - 1;
+          }
+          if (focusId >= nw) {
+            focusId = 0;
+          }
+          this._scrollCounter = 0;
+        }
+
+        if (current_focus == focusId) return;
+      }
+
+      let window = windows[focusId];
+
+      // log(`${focusId}/${window.get_id()}`);
+
+      if (window) {
+        if (activeWs == window.get_workspace()) {
+          window.raise();
+          window.focus(0);
+        } else {
+          activeWs.activate_with_focus(window, global.get_current_time());
+        }
+      }
+    }
+
+    _onScrollEvent(obj, evt) {
+      this.listeners
+        .filter((l) => {
+          return l._enabled;
+        })
+        .forEach((l) => {
+          if (l._onScrollEvent) l._onScrollEvent(obj, evt);
+        });
+
+      this._lastScrollEvent = evt;
+      let pointer = global.get_pointer();
+      if (this._nearestIcon) {
+        let icon = this._nearestIcon;
+        // log(`scroll - (${icon._pos}) (${pointer})`);
+        let SCROLL_RESOLUTION =
+          MIN_SCROLL_RESOLUTION +
+          MAX_SCROLL_RESOLUTION -
+          (MAX_SCROLL_RESOLUTION * this.extension.scroll_sensitivity || 0);
+        if (icon._appwell && icon._appwell.app) {
+          this._lastScrollObject = icon;
+          switch (evt.direction) {
+            case Clutter.ScrollDirection.UP:
+            case Clutter.ScrollDirection.LEFT:
+              this._scrollCounter += 1 / SCROLL_RESOLUTION;
+              break;
+            case Clutter.ScrollDirection.DOWN:
+            case Clutter.ScrollDirection.RIGHT:
+              this._scrollCounter -= 1 / SCROLL_RESOLUTION;
+              break;
+          }
+          this._cycleWindows(icon._appwell.app, evt);
+        }
+      }
     }
   }
 );

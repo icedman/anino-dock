@@ -44,9 +44,6 @@ const FIND_ICONS_SKIP_FRAMES = 16;
 const THROTTLE_DOWN_FRAMES = 30;
 const THROTTLE_DOWN_DELAY_FRAMES = 20;
 
-const MIN_SCROLL_RESOLUTION = 4;
-const MAX_SCROLL_RESOLUTION = 10;
-
 var Animator = class {
   constructor() {
     this._enabled = false;
@@ -54,8 +51,6 @@ var Animator = class {
 
   enable() {
     if (this._enabled) return;
-
-    this._scrollCounter = 0;
 
     this._iconsContainer = new IconsContainer({
       name: 'aninoIconsContainer',
@@ -179,6 +174,20 @@ var Animator = class {
     if (!this._iconsContainer || !this.dashContainer) return;
     this.dash = this.dashContainer.dash;
 
+    let icons = this._previousFind;
+
+    // minimize findIcons call
+    this._previousFindIndex++;
+    if (!icons || this._dragging || this._previousFindIndex < 0) {
+      icons = this._findIcons();
+      this._previousFind = icons;
+    } else {
+      if (this._previousFindIndex > FIND_ICONS_SKIP_FRAMES) {
+        this._previousFind = null;
+        this._previousFindIndex = 0;
+      }
+    }
+
     // get monitor scaleFactor
     let scaleFactor = this._getScaleFactor();
     let iconSize = Math.floor(this.dashContainer.iconSize);
@@ -210,12 +219,14 @@ var Animator = class {
     let padEndPos = '';
     this.dashContainer.dash.style = '';
 
+    let tx = this.extension._vertical ? 'y' : 'x';
+
     // center the dash
     {
       let width = this.extension._vertical
         ? this.dashContainer.height
         : this.dashContainer.width;
-      this.dashContainer.dash.x =
+      this.dashContainer.dash[tx] =
         width / 2 - (this._iconsCount * iconSpacing * scaleFactor) / 2;
     }
 
@@ -239,7 +250,7 @@ var Animator = class {
     pivot.x = 0.5;
     pivot.y = 1.0;
 
-    let validPosition = true;
+    let validPosition = this._iconsCount > 1;
     let dock_position = this.dashContainer._position;
     let ix = 0;
     let iy = 1;
@@ -276,20 +287,6 @@ var Animator = class {
     pivot.x *= scaleFactor;
     pivot.y *= scaleFactor;
 
-    let icons = this._previousFind;
-
-    // minimize findIcons call
-    this._previousFindIndex++;
-    if (!icons || this._dragging || this._previousFindIndex < 0) {
-      icons = this._findIcons();
-      this._previousFind = icons;
-    } else {
-      if (this._previousFindIndex > FIND_ICONS_SKIP_FRAMES) {
-        this._previousFind = null;
-        this._previousFindIndex = 0;
-      }
-    }
-
     this._iconsContainer.update({
       icons,
       iconSize: iconSize * scaleFactor,
@@ -318,6 +315,8 @@ var Animator = class {
     animateIcons = this._iconsContainer.get_children().filter((c) => {
       return c._bin && c._icon && c.visible;
     });
+
+    let firstIcon = animateIcons[0];
 
     animateIcons.forEach((c) => {
       if (this.extension.services) {
@@ -393,11 +392,15 @@ var Animator = class {
       icon._targetScale = 1;
       icon._targetSpread = iconSpacing * scaleFactor;
 
-      if (this.extension._vertical) {
-        //
-      } else {
-        if (pos[1] < this.dashContainer._monitor.height / 2) {
-          validPosition = false;
+      if (icon === firstIcon) {
+        if (this.extension._vertical) {
+          if (pos[1] > this.dashContainer.dash.y + iconSize * 2) {
+            validPosition = false;
+          }
+        } else {
+          if (pos[0] > this.dashContainer.dash.x + iconSize * 2) {
+            validPosition = false;
+          }
         }
       }
 
@@ -466,6 +469,7 @@ var Animator = class {
     }
 
     this._nearestIcon = nearestIcon;
+    this.dashContainer._nearestIcon = nearestIcon;
 
     let px = pointer[0];
     let py = pointer[1];
@@ -506,7 +510,7 @@ var Animator = class {
           ? this.dashContainer.height
           : this.dashContainer.width;
 
-        this.dashContainer.dash.x =
+        this.dashContainer.dash[tx] =
           width / 2 -
           ((this._iconsCount + 1) * anim.iconSpacing * scaleFactor) / 2;
         if (this.extension._vertical) {
@@ -618,6 +622,9 @@ var Animator = class {
         // handle label position
         //---------------------
         // todo find appsButton._label
+        // icon._label.visible = false;
+        // icon._label.opacity = 0;
+        // if (false)
         if (icon._label && !this._dragging) {
           if (icon == nearestIcon) {
             switch (dock_position) {
@@ -793,8 +800,15 @@ var Animator = class {
     this._isHidden = hide;
     this._iconsContainer.opacity = hide ? 0 : 255;
     this._dotsContainer.opacity = hide ? 0 : 255;
-    this._background.opacity = hide ? 0 : 255;
+    this._background._opacity = hide ? 0 : 255;
     this._dockOverlay.opacity = hide ? 0 : 255;
+
+    if (this._background._opacity != 0) {
+      this._background.opacity =
+        (this._background._opacity + this._background.opacity * 7) / 8;
+    } else {
+      this._background.opacity = 0;
+    }
   }
 
   // todo move to util
@@ -899,34 +913,6 @@ var Animator = class {
     }
   }
 
-  // todo: move to dockIcon
-  _onScrollEvent(obj, evt) {
-    this._lastScrollEvent = evt;
-    let pointer = global.get_pointer();
-    if (this._nearestIcon) {
-      let icon = this._nearestIcon;
-      // log(`scroll - (${icon._pos}) (${pointer})`);
-      let SCROLL_RESOLUTION =
-        MIN_SCROLL_RESOLUTION +
-        MAX_SCROLL_RESOLUTION -
-        (MAX_SCROLL_RESOLUTION * this.extension.scroll_sensitivity || 0);
-      if (icon._appwell && icon._appwell.app) {
-        this._lastScrollObject = icon;
-        switch (evt.direction) {
-          case Clutter.ScrollDirection.UP:
-          case Clutter.ScrollDirection.LEFT:
-            this._scrollCounter += 1 / SCROLL_RESOLUTION;
-            break;
-          case Clutter.ScrollDirection.DOWN:
-          case Clutter.ScrollDirection.RIGHT:
-            this._scrollCounter -= 1 / SCROLL_RESOLUTION;
-            break;
-        }
-        this._cycleWindows(icon._appwell.app, evt);
-      }
-    }
-  }
-
   _isWithinDash(p) {
     let pad = 0;
     let x1 = this._dockExtension.x;
@@ -992,77 +978,5 @@ var Animator = class {
   _isInFullscreen() {
     let monitor = this.dashContainer._monitor;
     return monitor.inFullscreen;
-  }
-
-  _lockCycle() {
-    if (this._lockedCycle) return;
-    this._lockedCycle = true;
-    this.extension._hiTimer.runOnce(() => {
-      this._lockedCycle = false;
-    }, 500);
-  }
-
-  _cycleWindows(app, evt) {
-    if (this._lockedCycle) {
-      this._scrollCounter = 0;
-      return false;
-    }
-
-    let focusId = 0;
-    let workspaceManager = global.workspace_manager;
-    let activeWs = workspaceManager.get_active_workspace();
-
-    let windows = app.get_windows();
-
-    if (evt.modifier_state & Clutter.ModifierType.CONTROL_MASK) {
-      windows = windows.filter((w) => {
-        return activeWs == w.get_workspace();
-      });
-    }
-
-    let nw = windows.length;
-    windows.sort((w1, w2) => {
-      return w1.get_id() > w2.get_id() ? -1 : 1;
-    });
-
-    if (nw > 1) {
-      for (let i = 0; i < nw; i++) {
-        if (windows[i].has_focus()) {
-          focusId = i;
-        }
-        if (windows[i].is_hidden()) {
-          windows[i].unminimize();
-          windows[i].raise();
-        }
-      }
-
-      let current_focus = focusId;
-
-      if (this._scrollCounter < -1 || this._scrollCounter > 1) {
-        focusId += Math.round(this._scrollCounter);
-        if (focusId < 0) {
-          focusId = nw - 1;
-        }
-        if (focusId >= nw) {
-          focusId = 0;
-        }
-        this._scrollCounter = 0;
-      }
-
-      if (current_focus == focusId) return;
-    }
-
-    let window = windows[focusId];
-
-    // log(`${focusId}/${window.get_id()}`);
-
-    if (window) {
-      if (activeWs == window.get_workspace()) {
-        window.raise();
-        window.focus(0);
-      } else {
-        activeWs.activate_with_focus(window, global.get_current_time());
-      }
-    }
   }
 };
