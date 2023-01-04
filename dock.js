@@ -54,6 +54,11 @@ var Dock = GObject.registerClass(
       this.panelRight = this.panel._rightBox;
       this.panelCenter = this.panel._centerBox;
 
+      this.separators = [
+        { index: 1 },
+        { index: 3 }
+      ];
+
       this.createDash();
 
       this.listeners = [this.animator, this.autohider];

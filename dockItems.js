@@ -197,10 +197,11 @@ var DotsContainer = GObject.registerClass(
         notification_badge_color,
         notification_badge_style_options,
         notification_badge_style,
+        separators
       } = params;
 
       this._precreate_dots({
-        count: dotsCount + icons.length,
+        count: dotsCount + icons.length + separators.length,
         show: true, // showDots || showBadges,
       });
 
@@ -299,6 +300,28 @@ var DotsContainer = GObject.registerClass(
           }
         }
       });
+
+      // let idx = 0;
+      // separators.forEach((s) => {
+      //   let icon = icons[idx++];
+      //   if (!icon) return;
+      //   let pos = [...icon._pos];
+      //   let dot = this._dots[dotIndex++];
+      //   if (dot) {
+      //     let dotParent = dot.get_parent();
+      //     dot.visible = true;
+
+      //     if (vertical) {
+      //       if (position == 'right') {
+      //         dotParent.set_position(pos[0] + 8 * scaleFactor, pos[1]);
+      //       } else {
+      //         dotParent.set_position(pos[0] - 8 * scaleFactor, pos[1]);
+      //       }
+      //     } else {
+      //       dotParent.set_position(pos[0], pos[1] + 8 * scaleFactor);
+      //     }
+      //   }
+      // });
     }
   }
 );

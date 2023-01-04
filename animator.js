@@ -490,7 +490,7 @@ var Animator = class {
         iconSize,
         iconSpacing,
         dock_position,
-        pointer,
+        pointer: [px, py],
         x: this.dashContainer.x,
         y: this.dashContainer.y,
         width: this.dashContainer.width,
@@ -552,6 +552,17 @@ var Animator = class {
       });
     }
 
+    let _scale_coef = ANIM_SCALE_COEF;
+    let _pos_coef = ANIM_POS_COEF;
+    if (this.extension.animation_fps > 0) {
+      _pos_coef /= 1 + this.extension.animation_fps / 2;
+      _scale_coef /= 1 + this.extension.animation_fps / 2;
+    }
+    if (!nearestIcon) {
+      _scale_coef *= ANIM_ON_LEAVE_COEF;
+      _pos_coef *= ANIM_ON_LEAVE_COEF;
+    }
+
     let dotIndex = 0;
     let has_errors = false;
 
@@ -576,23 +587,12 @@ var Animator = class {
       let from = this._get_position(icon);
       let dst = this._get_distance(from, icon._target);
 
-      let _scale_coef = ANIM_SCALE_COEF;
-      let _pos_coef = ANIM_POS_COEF;
-      if (this.extension.animation_fps > 0) {
-        _pos_coef /= 1 + this.extension.animation_fps / 2;
-        _scale_coef /= 1 + this.extension.animation_fps / 2;
-      }
-      if (!nearestIcon) {
-        _scale_coef *= ANIM_ON_LEAVE_COEF;
-        _pos_coef *= ANIM_ON_LEAVE_COEF;
-      }
-
       scale = (fromScale * _scale_coef + scale) / (_scale_coef + 1);
 
       if (
         dst > 8 * scaleFactor &&
         dst > iconSize * 0.01 &&
-        dst < iconSize * 3
+        dst < iconSize * 4
       ) {
         pos[0] = (from[0] * _pos_coef + pos[0]) / (_pos_coef + 1);
         pos[1] = (from[1] * _pos_coef + pos[1]) / (_pos_coef + 1);
@@ -676,6 +676,8 @@ var Animator = class {
         this.extension.notification_badge_style_options,
       notification_badge_style: this.extension.notification_badge_style,
       notification_badge_color: this.extension.notification_badge_color,
+      // separators
+      separators: this.dashContainer.separators || [],
     });
 
     if (validPosition && animateIcons.length > 1) {
