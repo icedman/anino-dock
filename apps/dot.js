@@ -310,5 +310,19 @@ var Dot = GObject.registerClass(
     _draw_dot(ctx, state) {
       this._draw_dots(ctx, { ...state, count: 1 });
     }
+
+    _draw_separator(ctx, state) {
+      let thickness = this._barHeight / 2;
+      let width = size - this._padding * 2;
+
+      ctx.translate(size / 2, size / 2);
+
+      ctx.newSubPath();
+      ctx.rectangle(0, -width / 2, thickness, width);
+
+      ctx.strokePreserve();
+      Drawing.set_color(ctx, state.color, state.color[3]);
+      ctx.fill();
+    }
   }
 );

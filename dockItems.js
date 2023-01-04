@@ -197,7 +197,7 @@ var DotsContainer = GObject.registerClass(
         notification_badge_color,
         notification_badge_style_options,
         notification_badge_style,
-        separators
+        separators,
       } = params;
 
       this._precreate_dots({
@@ -207,6 +207,8 @@ var DotsContainer = GObject.registerClass(
 
       let dotIndex = 0;
       icons.forEach((icon) => {
+        icon._container.style = '';
+
         let pos = [...icon._pos];
         let scale = icon._scale;
 
@@ -268,7 +270,7 @@ var DotsContainer = GObject.registerClass(
           let dot = this._dots[dotIndex++];
           icon._dot = dot;
           if (dot) {
-            let dotParent = icon._dot.get_parent();
+            let dotParent = dot.get_parent();
             dot.visible = true;
             dotParent.width = iconSize;
             dotParent.height = iconSize;
@@ -301,27 +303,50 @@ var DotsContainer = GObject.registerClass(
         }
       });
 
-      // let idx = 0;
-      // separators.forEach((s) => {
-      //   let icon = icons[idx++];
-      //   if (!icon) return;
-      //   let pos = [...icon._pos];
-      //   let dot = this._dots[dotIndex++];
-      //   if (dot) {
-      //     let dotParent = dot.get_parent();
-      //     dot.visible = true;
+      let separator_pad = 8;
+      separators.forEach((s) => {
+        let icon = icons[s.index];
+        if (!icon) return;
+        let pos = [...icon._pos];
+        let dot = this._dots[dotIndex++];
+        if (dot) {
+          let dotParent = dot.get_parent();
+          dot.visible = true;
+          dotParent.width = iconSize;
+          dotParent.height = iconSize;
+          dotParent.set_scale(1, 1);
 
-      //     if (vertical) {
-      //       if (position == 'right') {
-      //         dotParent.set_position(pos[0] + 8 * scaleFactor, pos[1]);
-      //       } else {
-      //         dotParent.set_position(pos[0] - 8 * scaleFactor, pos[1]);
-      //       }
-      //     } else {
-      //       dotParent.set_position(pos[0], pos[1] + 8 * scaleFactor);
-      //     }
-      //   }
-      // });
+          if (vertical) {
+            dotParent.set_position(
+              pos[0],
+              pos[1] -
+                (separator_pad + icon._container.height / 2) * scaleFactor
+            );
+          } else {
+            dotParent.set_position(
+              pos[0] -
+                (separator_pad + icon._container.width / 2) * scaleFactor,
+              pos[1]
+            );
+          }
+
+          icon._container.style = `margin-left: ${separator_pad * 2}px;`;
+
+          dot.set_scale(
+            (iconSize * scaleFactor) / DOT_CANVAS_SIZE,
+            (iconSize * scaleFactor) / DOT_CANVAS_SIZE
+          );
+
+          // let style = running_indicator_style_options[running_indicator_style];
+
+          dot.set_state({
+            count: 1,
+            color: [1, 1, 1, 0.2],
+            style: 'separator',
+            rotate: vertical ? (position == 'right' ? -90 : 90) : 0,
+          });
+        }
+      });
     }
   }
 );

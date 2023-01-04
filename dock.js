@@ -54,10 +54,7 @@ var Dock = GObject.registerClass(
       this.panelRight = this.panel._rightBox;
       this.panelCenter = this.panel._centerBox;
 
-      this.separators = [
-        { index: 1 },
-        { index: 3 }
-      ];
+      // this.separators = [{ index: 4 }, { index: 8 }];
 
       this.createDash();
 
@@ -139,8 +136,12 @@ var Dock = GObject.registerClass(
       // todo: refactor this
       // reparent -- rearranges the z-order
       let reparent = [
-        { c: this.animator._dotsContainer, p: this, above: true },
-        { c: this.animator._iconsContainer, p: this.animator._dotsContainer },
+        // { c: this.animator._dotsContainer, p: this, above: true },
+        // { c: this.animator._iconsContainer, p: this.animator._dotsContainer },
+
+        { c: this.animator._iconsContainer, p: this, above: true },
+        { c: this.animator._dotsContainer, p: this.animator._iconsContainer },
+
         { c: this.animator._background, p: this.animator.dashContainer },
         { c: this.animator._dockExtension, p: this.animator._background },
         {
