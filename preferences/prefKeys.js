@@ -16,12 +16,22 @@ var PrefKeys = class {
         key.key_maps,
         key.test,
         key.callback,
-        key.options
+        key.options,
+        key.template
       );
     });
   }
 
-  setKey(name, default_value, widget_type, maps, test, callback, options) {
+  setKey(
+    name,
+    default_value,
+    widget_type,
+    maps,
+    test,
+    callback,
+    options,
+    template
+  ) {
     this._keys[name] = {
       name,
       default_value,
@@ -31,6 +41,7 @@ var PrefKeys = class {
       test: test,
       callback,
       options,
+      template,
       object: null,
     };
   }
@@ -64,6 +75,9 @@ var PrefKeys = class {
 
     if (this._keys[name].callback) {
       this._keys[name].callback(this._keys[name].value);
+    }
+    if (this.callback) {
+      this.callback(this, this._keys[name]);
     }
   }
 
@@ -224,9 +238,6 @@ var PrefKeys = class {
           signal_id = key.object.connect('state-set', (w) => {
             let value = w.get_active();
             self.setValue(name, value);
-            if (key.callback) {
-              key.callback(value);
-            }
           });
           break;
         }

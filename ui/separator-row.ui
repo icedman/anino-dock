@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="AdwExpanderRow" id="template">
+    <property name="title" translatable="yes">google-chrome</property>
+    <property name="show-enable-switch">false</property>
+    <child>
+      <object class="AdwActionRow">
+        <property name="title" translatable="yes">Disable</property>
+        <property name="subtitle" translatable="yes">Exclude window from custom button effects.</property>
+        <property name="activatable-widget">exclude-window</property>
+        <child>
+          <object class="GtkSwitch" id="exclude-window">
+            <property name="valign">center</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow">
+        <property name="title" translatable="yes">Close Button Only</property>
+        <property name="subtitle" translatable="yes">Show only the close button.</property>
+        <property name="activatable-widget">close-button-only</property>
+        <child>
+          <object class="GtkSwitch" id="close-button-only">
+            <property name="valign">center</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="self-test-row">
+        <property name="title" translatable="yes">Remove Entry</property>
+        <property name="subtitle" translatable="yes">Remove window from this list.</property>
+        <child>
+          <object class="GtkButton" id="remove">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkBox">
+                <property name="margin-start">20</property>
+                <property name="margin-end">20</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="margin-end">6</property>
+                    <property name="icon-name">remove-window-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Remove</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <style>
+              <class name="circular"/>
+              <class name="destructive-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

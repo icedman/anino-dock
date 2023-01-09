@@ -5,6 +5,49 @@
     <property name="title" translatable="yes">General</property>
     <property name="icon-name">general-symbolic</property>
     <child>
+      <object class="AdwPreferencesGroup" id="test-row-container">
+        <property name="visible">false</property>
+        <property name="title" translatable="yes">Sample Rows</property>
+        <property name="description" translatable="yes"/>
+        <child>
+          <object class="AdwActionRow" id="test-row">
+            <property name="visible">true</property>
+            <property name="title" translatable="yes">Test</property>
+            <property name="subtitle" translatable="yes">Run self-test. Messages will be logged at the terminal running journalctl -f. WARNING: This takes a few minutes to finish.</property>
+            <child>
+              <object class="GtkButton" id="test-row-add">
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="margin-start">20</property>
+                    <property name="margin-end">20</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="margin-end">6</property>
+                        <property name="icon-name">pulse-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Run</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <style>
+                  <class name="circular"/>
+                  <class name="destructive-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Dock</property>
         <property name="description" translatable="yes"/>

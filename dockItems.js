@@ -10,7 +10,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const DrawOverlay = Me.imports.apps.overlay.DrawOverlay;
 const Drawing = Me.imports.drawing.Drawing;
 
-const Dot = Me.imports.apps.dot.Dot;
+const Dot = Me.imports.decor.Dot;
 
 const DOT_CANVAS_SIZE = 96;
 
