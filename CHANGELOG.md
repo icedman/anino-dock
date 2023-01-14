@@ -3,13 +3,20 @@
 * Add multiple-docks support
 * Add more autohide features
 * Separator
-* Panel mode (combine with topbar)
 * Arch Menu support (?)
 * Multi-language
+* Cairo rendering
 
 # Current Issues
 
 * Startup artifacts showing prior to scaling down
+
+# Release 1
+
+* Lamp animation
+* Advanced panel mode (combine with topbar)
+* Vertical layouts
+* Improved animation
 
 # Dash2Dock Lite
 

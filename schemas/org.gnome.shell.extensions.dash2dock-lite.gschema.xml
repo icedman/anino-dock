@@ -41,6 +41,11 @@
         <summary>Open app animation</summary>
         <description>Open app animation.</description>
     </key>
+    <key type="b" name="min-max-app-animation">
+        <default>false</default>
+        <summary>Minimize/Maximize animation</summary>
+        <description>Minimize/Maximize animation.</description>
+    </key>
     <key type="b" name="autohide-dash">
         <default>false</default>
         <summary>Autohide dash panel</summary>

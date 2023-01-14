@@ -89,6 +89,10 @@ Modify the script to match your system if necessary. And make sure that the scri
 chmod +x {EXTENSION_PATH}/apps/empty-trash.sh
 ```
 
+## Credits
+
+* [compiz-alike-magic-lamp-effect](https://github.com/hermes83/compiz-alike-magic-lamp-effect)
+
 ## License
 
 Distributed under the GPL 3.0 License. See [LICENSE](https://github.com/icedman/anino-dock/blob/main/LICENSE.md) for more information.

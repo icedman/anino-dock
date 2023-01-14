@@ -33,6 +33,79 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="valign">center</property>
+                        <property name="label" translatable="yes">Test</property>
+                        <property name="xalign">0</property>
+                        <property name="hexpand">1</property>
+                        <attributes>
+                          <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test-row-add">
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-start">20</property>
+                            <property name="margin-end">20</property>
+                            <property name="margin-top">6</property>
+                            <property name="margin-bottom">6</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="margin-end">6</property>
+                                <property name="icon-name">pulse-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Run</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="circular"/>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="label" translatable="yes">Run self-test. Messages will be logged at the terminal running journalctl -f. WARNING: This takes a few minutes to finish.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">32</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="valign">center</property>
                         <property name="label" translatable="yes">Preferred Monitor</property>
                         <property name="xalign">0</property>
                         <property name="hexpand">1</property>
@@ -202,6 +275,55 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">Animate icons on opening new apps.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">32</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes">Minimize/Maximize Animation</property>
+                        <property name="xalign">0</property>
+                        <property name="hexpand">1</property>
+                        <attributes>
+                          <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSwitch" id="min-max-app-animation">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="label" translatable="yes">Animate icons with compiz-alike-magic-lamp-effect.</property>
                   </object>
                 </child>
               </object>
@@ -496,79 +618,6 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">Show visual indicators when animations are running.</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkListBoxRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">32</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="label" translatable="yes">Test</property>
-                        <property name="xalign">0</property>
-                        <property name="hexpand">1</property>
-                        <attributes>
-                          <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="self-test">
-                        <property name="halign">start</property>
-                        <property name="valign">center</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="margin-start">20</property>
-                            <property name="margin-end">20</property>
-                            <property name="margin-top">6</property>
-                            <property name="margin-bottom">6</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="margin-end">6</property>
-                                <property name="icon-name">pulse-symbolic</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Run</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="circular"/>
-                          <class name="destructive-action"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="halign">start</property>
-                    <property name="valign">center</property>
-                    <property name="label" translatable="yes">Run self-test. Messages will be logged at the terminal running journalctl -f. WARNING: This takes a few minutes to finish.</property>
                   </object>
                 </child>
               </object>

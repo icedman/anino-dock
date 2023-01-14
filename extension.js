@@ -67,7 +67,7 @@ class Extension {
       SettingsKeys.setValue('animate-icons', true);
     }
 
-    LampAnimation.enable();
+    this._lampAnimation = LampAnimation;
 
     this.dashContainer = new Dock();
     this.dashContainer.extension = this;
@@ -104,6 +104,7 @@ class Extension {
     this._updateAutohide();
     this._updateTrashIcon();
     this._updateStyle();
+    this._updateLampAnimation();
 
     this._addEvents();
 
@@ -133,8 +134,7 @@ class Extension {
     this._updateShrink(true);
     this._updateLayout(true);
     this._updateAutohide(true);
-
-    LampAnimation.disable();
+    this._updateLayout(true);
 
     Main.overview.dash.visible = true;
     this.dashContainer.undock();
@@ -154,12 +154,6 @@ class Extension {
 
     this._style.unloadAll();
     this._style = null;
-
-    // restore dash._box
-    if (Main.overview.dash.__box) {
-      Main.overview.dash._box = Main.overview.dash.__box;
-      Main.overview.dash.__box = null;
-    }
 
     log('anino-dock disabled');
   }
@@ -291,6 +285,9 @@ class Extension {
           break;
         }
         // problematic settings needing animator restart
+        case 'min-max-app-animation':
+          this._updateLampAnimation();
+          break;
         case 'dock-location':
         case 'icon-resolution': {
           this._disable_borders = this.border_radius > 0;
@@ -304,6 +301,7 @@ class Extension {
           this.animator._background.visible = false;
           this._updateStyle();
           this._updateLayout();
+          this._updateLampAnimation();
           // this.animate();
           this.startUp();
           break;
@@ -513,6 +511,13 @@ class Extension {
       .forEach((l) => {
         if (l._onFullScreen) l._onFullScreen();
       });
+  }
+
+  _updateLampAnimation(disable) {
+    if (!this.min_max_app_animation) {
+      disable = true;
+    }
+    this._lampAnimation.update(disable);
   }
 
   _updateAnimationFPS() {

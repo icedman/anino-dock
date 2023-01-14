@@ -117,6 +117,27 @@
             -->
           </object>
         </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="visible">true</property>
+            <property name="title" translatable="yes">Minimize/Maximize Animation</property>
+            <property name="subtitle" translatable="yes">Animate icons with compiz-alike-magic-lamp-effect.</property>
+            <property name="activatable-widget">min-max-app-animation</property>
+            <child>
+              <object class="GtkSwitch" id="min-max-app-animation">
+                <property name="valign">center</property>
+              </object>
+            </child>
+            <!--
+            <child>
+              <object class="GtkDropDown" id="open-app-animation">
+                <property name="valign">center</property>
+                <property name="model">open-app-animation-model</property>
+              </object>
+            </child>
+            -->
+          </object>
+        </child>
       </object>
     </child>
     <child>

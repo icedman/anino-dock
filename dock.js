@@ -593,18 +593,21 @@ var Dock = GObject.registerClass(
             this._monitor.x,
             this._monitor.y + (this._monitorIsPrimary ? Main.panel.height : 0)
           );
-
           // right
           if (this._position == 'right') {
             this.x += this._monitor.width;
             this.x -= dockHeight * scaleFactor;
           }
+
+          this.dash.x = 0;
         } else {
           // top/bottom
           this.set_position(
             this._monitor.x,
             this._monitor.y + this._monitor.height - dockHeight * scaleFactor
           );
+
+          this.dash.y = 0;
         }
 
         this._fixedPosition = [this.x, this.y];
