@@ -176,6 +176,13 @@ var Animator = class {
 
     let icons = this._previousFind;
 
+    // satisfy other extensions
+    // compiz effects
+    if (!Main.overview.dash.__box) {
+      Main.overview.dash._box = Main.overview.dash.__box;
+    }
+    Main.overview.dash._box = this.dashContainer.dash._box;
+
     // minimize findIcons call
     this._previousFindIndex++;
     if (!icons || this._dragging || this._previousFindIndex < 0) {

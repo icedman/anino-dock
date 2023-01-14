@@ -462,8 +462,9 @@ var Services = class {
       }
     }
 
-    // clock
     let didCreate = false;
+
+    // clock
     if (icon.icon_name == 'org.gnome.clocks') {
       let p = icon.get_parent();
       if (this.extension.clock_icon) {
