@@ -150,6 +150,12 @@ class Extension {
     this._style.unloadAll();
     this._style = null;
 
+    // restore dash._box
+    if (Main.overview.dash.__box) {
+      Main.overview.dash._box = Main.overview.dash.__box;
+      Main.overview.dash.__box = null;
+    }
+
     log('anino-dock disabled');
   }
 

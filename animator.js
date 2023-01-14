@@ -179,7 +179,7 @@ var Animator = class {
     // satisfy other extensions
     // compiz effects
     if (!Main.overview.dash.__box) {
-      Main.overview.dash._box = Main.overview.dash.__box;
+      Main.overview.dash.__box = Main.overview.dash._box;
     }
     Main.overview.dash._box = this.dashContainer.dash._box;
 
