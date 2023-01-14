@@ -13,6 +13,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 
 const { schemaId, settingsKeys, SettingsKeys } = Me.imports.preferences.keys;
 
+const LampAnimation = Me.imports.effects.lamp_animation.LampAnimation;
 const Animator = Me.imports.animator.Animator;
 const AutoHide = Me.imports.autohide.AutoHide;
 const Services = Me.imports.services.Services;
@@ -65,6 +66,8 @@ class Extension {
     if (!SettingsKeys.getValue('animate-icons')) {
       SettingsKeys.setValue('animate-icons', true);
     }
+
+    LampAnimation.enable();
 
     this.dashContainer = new Dock();
     this.dashContainer.extension = this;
@@ -130,6 +133,8 @@ class Extension {
     this._updateShrink(true);
     this._updateLayout(true);
     this._updateAutohide(true);
+
+    LampAnimation.disable();
 
     Main.overview.dash.visible = true;
     this.dashContainer.undock();
