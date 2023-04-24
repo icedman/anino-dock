@@ -8,6 +8,7 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+const GdkPixbuf = imports.gi.GdkPixbuf;
 
 const iconsCountTest = 10;
 
@@ -33,6 +34,9 @@ imports.searchPath.push(path);
 imports.searchPath.push(path + '/../');
 
 const Drawing = imports.drawing;
+const PixBuffer = GdkPixbuf.Pixbuf.new_from_file(
+  './tests/visual-studio-code.png'
+);
 
 const App = function () {
   this.title = 'Example Cairo';
@@ -366,6 +370,7 @@ App.prototype.draw = function (area, ctx) {
       iconSize,
       1
     );
+    Drawing.draw_image(ctx, -iconSize, -iconSize, iconSize, iconSize, PixBuffer, 800, 800);
     ctx.restore();
     Drawing.draw_rect(ctx, [1, 0, 1, 1], f.x, f.y, f.w, iconSpacing, 1);
   });

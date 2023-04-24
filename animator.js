@@ -35,7 +35,7 @@ const ANIM_SCALE_COEF = 2.5;
 const ANIM_ON_LEAVE_COEF = 2.0;
 const ANIM_ICON_RAISE = 0.6;
 const ANIM_ICON_SCALE = 1.5;
-const ANIM_ICON_HIT_AREA = 2.5;
+const ANIM_ICON_HIT_AREA = 1.5;
 const ANIM_REENABLE_DELAY = 250;
 const ANIM_DEBOUNCE_END_DELAY = 750;
 const ANIM_PREVIEW_DURATION = 1200;
@@ -374,9 +374,16 @@ var Animator = class {
       let bposcenter = [...pos];
       bposcenter[0] += (iconSize * scaleFactor) / 2;
       bposcenter[1] += (iconSize * scaleFactor) / 2;
-      let dst = this._get_distance(pointer, bposcenter);
+      let dst = -1;
 
-      if (
+      // prevent shake at last icon bug
+      let bgRect = [...this._background.get_transformed_position(), this._background.width, this._background.height];
+      if ((bgRect[0] < pointer[0] && bgRect[0] + bgRect[2] > pointer[0]) &&
+          (bgRect[1] < pointer[1] && bgRect[1] + bgRect[3] > pointer[1])) {
+        dst = this._get_distance(pointer, bposcenter);
+      }
+
+      if (dst != -1 && 
         (nearestDistance == -1 || nearestDistance > dst) &&
         dst < iconSize * ANIM_ICON_HIT_AREA * scaleFactor
       ) {

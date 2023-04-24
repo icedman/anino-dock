@@ -580,7 +580,7 @@ var Dock = GObject.registerClass(
         this.dash.last_child.layout_manager.orientation = 0;
         this.dash._box.layout_manager.orientation = 0;
         this.dash.height = dockHeight * scaleFactor;
-        this.dash.width = -1;
+        this.dash.width = -2;
         this.dash.remove_style_class_name('vertical');
       }
 
@@ -603,7 +603,7 @@ var Dock = GObject.registerClass(
         } else {
           // top/bottom
           this.set_position(
-            this._monitor.x,
+            this._monitor.x + 1,
             this._monitor.y + this._monitor.height - dockHeight * scaleFactor
           );
 

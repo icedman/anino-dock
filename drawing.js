@@ -1,4 +1,4 @@
-const { Clutter, GObject, GLib, PangoCairo, Pango } = imports.gi;
+const { Clutter, GObject, GLib, PangoCairo, Pango, Gdk } = imports.gi;
 const Cairo = imports.cairo;
 
 function draw_rotated_line(ctx, color, width, angle, len, offset) {
@@ -44,7 +44,8 @@ function draw_rounded_rect(
   h_size,
   v_size,
   line_width,
-  border_radius
+  border_radius,
+  buf
 ) {
   ctx.save();
   set_color(ctx, color, 1);
@@ -109,6 +110,15 @@ function draw_text(ctx, showtext, font = 'DejaVuSans 42') {
   return [w, h];
 }
 
+function draw_image(ctx, x, y, width, height, source, sw, sh) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(width/sw, height/sh);
+  Gdk.cairo_set_source_pixbuf(ctx, source, 0, 0);
+  ctx.paint();
+  ctx.restore();
+}
+
 function set_color(ctx, clr, alpha) {
   if (typeof clr === 'string') {
     const [, cc] = Clutter.Color.from_string(clr);
@@ -135,4 +145,5 @@ var Drawing = {
   draw_rect,
   draw_rounded_rect,
   draw_text,
+  draw_image
 };
