@@ -1,3 +1,10 @@
+# ANNOUNCEMENT
+
+Dash2Dock Lite has been renamed to [Dash2Dock Animated](https://github.com/icedman/dash2dock-lite). And that extension has overtaken most of the features of Anino Dock.
+With Dash-to-Dock becoming very stable. There is currently no need for a "Lite" version of the Dock.
+
+I have other plans for Anino Dock now - which will be renamed to Anino Shell. It will be eye candies for the Shell, not just the Dock.
+
 <br/>
 <p align="center">
   <h3 align="center">Anino Dock</h3>
